@@ -34,6 +34,34 @@ We can set the following variables when specifying the list file:
 `^USER^`: Replace this string in <query parameter> with the username listed in \<username list file\>  
 `^PASSWORD^`: Replace this string in <query parameter> with the password listed in \<password list file\>
 
+# JWT (JSON Web Token) exploit
+
+### Debugger
+This website provides decoding JWT and editing the payload in decoded JWT.  
+https://jwt.io/
+
+### jwt_tool
+This tool helps us to validate, tamper, and forge JWTs for a pentester.  
+https://github.com/ticarpi/jwt_tool
+
+
+#### tampering
+```
+python jwt_tool.py <JWT> -T
+```
+
+#### exploit
+```
+python jwt_tool.py <JWT> -X <parameter>
+```
+The parameter can be specified as follow:  
+`a`: alg:none  
+`n`: null signature  
+`b`: blank password accepted in signture  
+`s`: spoof JWKS  
+`k`: key confusion  
+`i`: inject inline JKWS  
+
 
 # Linux command
 ## String Processing
