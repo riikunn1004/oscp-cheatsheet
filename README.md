@@ -31,8 +31,8 @@ hydra -L <username list file> -P <password list file> <ip address> http-post-for
 hydra -l <username> -P <password list file> <ip address> http-post-form '<path>:<query parameter>:<string when failing login>'
 ```
 We can set the following variables when specifying the list file:  
-`^USER^`: Replace this string in <query parameter> with the username listed in \<username list file\>  
-`^PASSWORD^`: Replace this string in <query parameter> with the password listed in \<password list file\>
+`^USER^`: Replace this string in \<query parameter\> with the username listed in \<username list file\>  
+`^PASSWORD^`: Replace this string in \<query parameter\> with the password listed in \<password list file\>
 
 # JWT (JSON Web Token) exploit
 
