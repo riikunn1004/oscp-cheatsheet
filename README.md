@@ -2,8 +2,50 @@
 This repository describes cheat sheet and knowledge for OSCP.
 
 # Contents
-<!-- START doctoc -->
-<!-- END doctoc -->
+<!-- START doctoc generated TOC please keep comment here to allow auto update -->
+<!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
+**Table of Contents**
+
+- [Enumeration](#enumeration)
+  - [Network](#network)
+    - [nmap](#nmap)
+      - [Example](#example)
+      - [Options](#options)
+  - [Windows Privilege Escalation](#windows-privilege-escalation)
+    - [PowerUp.ps1](#powerupps1)
+    - [Scan](#scan)
+- [Brute Force Attack](#brute-force-attack)
+  - [Password](#password)
+    - [hydra](#hydra)
+      - [Example](#example-1)
+- [JWT (JSON Web Token) exploit](#jwt-json-web-token-exploit)
+    - [Debugger](#debugger)
+    - [jwt_tool](#jwt_tool)
+      - [tampering](#tampering)
+      - [exploit](#exploit)
+- [Linux command](#linux-command)
+  - [String Processing](#string-processing)
+    - [Remove white spaces](#remove-white-spaces)
+  - [SMB](#smb)
+    - [smbclient](#smbclient)
+- [Windows command](#windows-command)
+  - [Powershell](#powershell)
+    - [Create New file](#create-new-file)
+    - [Display the contents of a text file](#display-the-contents-of-a-text-file)
+- [Metasploit](#metasploit)
+  - [meterpreter](#meterpreter)
+  - [Get system info](#get-system-info)
+    - [Start shell](#start-shell)
+    - [Upload file from Metasploit host to target](#upload-file-from-metasploit-host-to-target)
+    - [Download file from target to Metasploit host](#download-file-from-target-to-metasploit-host)
+    - [Load powershell and run](#load-powershell-and-run)
+  - [msfvenom](#msfvenom)
+    - [Windows](#windows)
+      - [exe](#exe)
+    - [exe-service](#exe-service)
+- [LICENSE](#license)
+
+<!-- END doctoc generated TOC please keep comment here to allow auto update -->
 # Enumeration
 ## Network
 ### nmap
