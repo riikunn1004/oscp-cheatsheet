@@ -9,10 +9,7 @@ list = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o
     '!', "'", '#', '$', '%', '&', "'", '(', ')', '+', ',', '-', '.', '/', ':', ';', '<', '=', '>', '?', '@', '[', ']', '^', '_', ',', '{', '}', '~', '1', '2', '3', '4', '5', '6', '7', '8', '9', '0']
 
 
-def bruteforce(url: str, ch: str):
-    pass
-
-def main(url: str):
+def send_request(url: str):
     data = {'username': '', 'password': '*'}
     result = ''
 
@@ -38,5 +35,5 @@ if __name__ == '__main__':
 
     url = args.url
 
-    main(url)
+    send_request(url)
 
