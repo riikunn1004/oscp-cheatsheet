@@ -6,6 +6,8 @@ This repository describes cheat sheet and knowledge for OSCP.
 <!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
 **Table of Contents**
 
+- [oscp-cheatsheet](#oscp-cheatsheet)
+- [Contents](#contents)
 - [Enumeration](#enumeration)
   - [Network](#network)
     - [nmap](#nmap)
@@ -35,6 +37,8 @@ This repository describes cheat sheet and knowledge for OSCP.
   - [Basic command](#basic-command)
     - [Show allowing commands as root user](#show-allowing-commands-as-root-user)
     - [Run command as other user](#run-command-as-other-user)
+  - [DNS](#dns)
+    - [Specify referred DNS server](#specify-referred-dns-server)
   - [String Processing](#string-processing)
     - [Remove white spaces](#remove-white-spaces)
   - [SMB](#smb)
@@ -183,7 +187,12 @@ e.g.
 sudo -u <user> /bin/bash
 ```
 
-
+## DNS
+### Specify referred DNS server
+```
+nslookup
+server <DNS Server>
+```
 
 ## String Processing
 ### Remove white spaces
