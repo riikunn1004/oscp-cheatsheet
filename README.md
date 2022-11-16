@@ -6,8 +6,6 @@ This repository describes cheat sheet and knowledge for OSCP.
 <!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
 **Table of Contents**
 
-- [oscp-cheatsheet](#oscp-cheatsheet)
-- [Contents](#contents)
 - [Enumeration](#enumeration)
   - [Network](#network)
     - [nmap](#nmap)
