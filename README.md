@@ -28,6 +28,10 @@ This repository describes cheat sheet and knowledge for OSCP.
   - [Directory](#directory-1)
     - [dirb](#dirb-2)
     - [gobuster](#gobuster-1)
+  - [DNS subdomains](#dns-subdomains)
+    - [gobuster](#gobuster-2)
+      - [Wordlist example](#wordlist-example)
+        - [bitquark-subdomains-top100000.txt](#bitquark-subdomains-top100000txt)
 - [JWT (JSON Web Token) exploit](#jwt-json-web-token-exploit)
     - [Debugger](#debugger)
     - [jwt_tool](#jwt_tool)
@@ -141,6 +145,16 @@ dirb <target url>
 ```
 gobuster dir -u <target url> -w /usr/share/wordlists/dirb/common.txt -t 100
 ```
+## DNS subdomains
+### gobuster
+```
+gobuster dns -d <domain name> -w <dns subdomains wordlist>
+```
+#### Wordlist example
+##### bitquark-subdomains-top100000.txt
+https://github.com/danielmiessler/SecLists/blob/master/Discovery/DNS/bitquark-subdomains-top100000.txt
+
+
 # JWT (JSON Web Token) exploit
 
 ### Debugger
