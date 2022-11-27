@@ -6,6 +6,8 @@ This repository describes cheat sheet and knowledge for OSCP.
 <!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
 **Table of Contents**
 
+- [oscp-cheatsheet](#oscp-cheatsheet)
+- [Contents](#contents)
 - [Enumeration](#enumeration)
   - [Network](#network)
     - [nmap](#nmap)
@@ -32,13 +34,15 @@ This repository describes cheat sheet and knowledge for OSCP.
         - [bitquark-subdomains-top100000.txt](#bitquark-subdomains-top100000txt)
 - [JWT (JSON Web Token) exploit](#jwt-json-web-token-exploit)
     - [Debugger](#debugger)
-    - [jwt_tool](#jwt_tool)
+    - [jwt\_tool](#jwt_tool)
       - [tampering](#tampering)
       - [exploit](#exploit)
 - [Linux command](#linux-command)
   - [Basic command](#basic-command)
     - [Show allowing commands as root user](#show-allowing-commands-as-root-user)
     - [Run command as other user](#run-command-as-other-user)
+    - [Show file type](#show-file-type)
+    - [Show the strings of printable characters in files](#show-the-strings-of-printable-characters-in-files)
   - [DNS](#dns)
     - [Specify referred DNS server](#specify-referred-dns-server)
   - [String Processing](#string-processing)
@@ -197,6 +201,15 @@ sudo -u <user> <command>
 e.g.
 ```
 sudo -u <user> /bin/bash
+```
+### Show file type
+```
+file <file name>
+```
+
+### Show the strings of printable characters in files
+```
+strings <file name>
 ```
 
 ## DNS
