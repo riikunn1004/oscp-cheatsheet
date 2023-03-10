@@ -6,6 +6,8 @@ This repository describes cheat sheet and knowledge for OSCP.
 <!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
 **Table of Contents**
 
+- [oscp-cheatsheet](#oscp-cheatsheet)
+- [Contents](#contents)
 - [Enumeration](#enumeration)
   - [Network](#network)
     - [nmap](#nmap)
@@ -32,13 +34,19 @@ This repository describes cheat sheet and knowledge for OSCP.
         - [bitquark-subdomains-top100000.txt](#bitquark-subdomains-top100000txt)
 - [JWT (JSON Web Token) exploit](#jwt-json-web-token-exploit)
     - [Debugger](#debugger)
-    - [jwt_tool](#jwt_tool)
+    - [jwt\_tool](#jwt_tool)
       - [tampering](#tampering)
       - [exploit](#exploit)
 - [SSTI (Server-Side Template Injection)](#ssti-server-side-template-injection)
   - [PayloadsAllTheThings](#payloadsallthethings)
     - [Mako](#mako)
       - [RCE](#rce)
+- [SQL Injection](#sql-injection)
+  - [PayloadsAllTheThings](#payloadsallthethings-1)
+    - [Insert Statement injection using ON DUPLICATE KEY UPDATE](#insert-statement-injection-using-on-duplicate-key-update)
+- [Aggregating Sensitive Information](#aggregating-sensitive-information)
+  - [truffleHog](#trufflehog)
+    - [Scan GitHub](#scan-github)
 - [Linux command](#linux-command)
   - [Basic command](#basic-command)
     - [Show allowing commands as root user](#show-allowing-commands-as-root-user)
@@ -197,7 +205,22 @@ https://github.com/swisskyrepo/PayloadsAllTheThings/blob/master/Server%20Side%20
 ${self.module.cache.util.os.popen("cat /flag.txt").read()}
 ```
 
+# SQL Injection
+## PayloadsAllTheThings
+https://github.com/swisskyrepo/PayloadsAllTheThings/tree/master/SQL%20Injection
 
+### Insert Statement injection using ON DUPLICATE KEY UPDATE
+https://github.com/swisskyrepo/PayloadsAllTheThings/tree/master/SQL%20Injection#insert-statement---on-duplicate-key-update
+
+# Aggregating Sensitive Information
+## truffleHog
+This tool gets high entropy strings (e.g. Password, APIKey, etc...).
+https://github.com/trufflesecurity/trufflehog
+### Scan GitHub
+Docker
+``` shell
+docker run --rm -it -v "$PWD:/pwd" trufflesecurity/trufflehog:latest github --repo <Repository URL></Repository>
+```
 # Linux command
 
 ## Basic command
