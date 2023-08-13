@@ -111,6 +111,18 @@ Invoke-PrivescAudit [-HTMLReport]
 ```
 Note that this tool output "COMPUTER.username.html" if the `-HTMLReport` is enabled.
 
+## Linux Privilege Escalation
+### LinPEAS
+LinePEAS is a script which detect the possible path to escalate privilege on Linux etc...
+```
+https://github.com/carlospolop/PEASS-ng/tree/master/linPEAS
+```
+
+### pspy
+Monitoring process tool in real time.
+```
+https://github.com/DominicBreuker/pspy
+```
 
 # Brute Force Attack
 ## Password
@@ -289,7 +301,17 @@ python -m http.server <port>
 python -m SimpleHTTPServer <port>
 ```
 
+# Reverse shell
+## php-reverse-shell
+```
+https://pentestmonkey.net/tools/web-shells/php-reverse-shell
+```
 
+## Reverse shell cheat sheet
+https://github.com/swisskyrepo/PayloadsAllTheThings/blob/master/Methodology%20and%20Resources/Reverse%20Shell%20Cheatsheet.md
+
+## Metasploit
+Refer  [msfvenom](#msfvenom)
 # Metasploit
 ## meterpreter
 ## Get system info
@@ -336,8 +358,7 @@ msfvenom -p windows/shell_reverse_tcp LHOST=<lhost> LPORT=<lport> -e x86/shikata
 This website is a curated list of Unix binaries that can be used to bypass local security restrictions in misconfigured systems.  
 https://gtfobins.github.io/
 
-### Reverse shell cheat sheet
-https://github.com/swisskyrepo/PayloadsAllTheThings/blob/master/Methodology%20and%20Resources/Reverse%20Shell%20Cheatsheet.md
+
 
 ## References for vulnerabilities
 ### Shellshock (CVE-2014-6271)
