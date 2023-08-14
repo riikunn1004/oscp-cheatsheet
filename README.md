@@ -386,6 +386,11 @@ https://gtfobins.github.io/
 ### Shellshock (CVE-2014-6271)
 https://blog.cloudflare.com/inside-shellshock/
 
+## Kali linux on docker for Mac
+https://5kyr153r.hatenablog.jp/entry/2022/11/14/104548 (Japanese)
+https://www.kali.org/docs/general-use/novnc-kali-in-browser/
+
+
 
 
 # LICENSE
