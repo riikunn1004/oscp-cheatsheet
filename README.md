@@ -93,6 +93,7 @@ This repository describes cheat sheet and knowledge for OSCP.
     - [GTFOBins](#gtfobins)
   - [References for vulnerabilities](#references-for-vulnerabilities)
     - [Shellshock (CVE-2014-6271)](#shellshock-cve-2014-6271)
+  - [Kali linux on docker for Mac](#kali-linux-on-docker-for-mac)
 - [LICENSE](#license)
 
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
