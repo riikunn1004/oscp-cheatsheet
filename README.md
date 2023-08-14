@@ -285,6 +285,12 @@ file <file name>
 strings <file name>
 ```
 
+## Disable password checking for sudo
+```
+echo "<username> ALL=(root) NOPASSWD: ALL" >> /etc/sudoers
+```
+
+
 ## DNS
 ### Specify referred DNS server
 ```
