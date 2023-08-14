@@ -124,9 +124,8 @@ Monitoring process tool in real time.
 https://github.com/DominicBreuker/pspy
 ```
 
-# Brute Force Attack
-## Password
-### hydra
+# Password Cracking
+## hydra
 #### Example
 - Brute force attack for username and password (HTTP POST)
 ```console
@@ -140,6 +139,23 @@ We can set the following variables when specifying the list file:
 `^USER^`: Replace this string in \<query parameter\> with the username listed in \<username list file\>  
 `^PASSWORD^`: Replace this string in \<query parameter\> with the password listed in \<password list file\>
 
+## John the ripper
+A tool to get the plain password from hashed one.
+
+#### Example
+```
+john --wordlist=rockyou.txt hash.txt
+```
+
+## Webpages 
+Webpages to get the plain password from hashed one, as follows:
+### Hashes
+https://hashes.com/en/decrypt/hash
+
+### craskstation
+https://crackstation.net/
+
+# Brute Force Attack
 ## Directory
 ### dirb
 ```
