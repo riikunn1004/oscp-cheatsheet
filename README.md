@@ -306,6 +306,18 @@ strings <file name>
 echo "<username> ALL=(root) NOPASSWD: ALL" >> /etc/sudoers
 ```
 
+### SUID
+The privileged mode can be run if the suid for the script is enabled. 
+For example, if we want to run the script, named '.suid_bash', with root privilege, 
+```
+-rwsr-sr-x 1 root  root  1113504 Jul 22  2020  .suid_bash
+```
+we should run the following command: 
+```
+./.suid_bash -p
+```
+https://stackoverflow.com/questions/63689353/suid-binary-privilege-escalation
+
 
 ## DNS
 ### Specify referred DNS server
