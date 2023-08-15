@@ -160,6 +160,21 @@ A tool to get the plain password from hashed one.
 john --wordlist=rockyou.txt hash.txt
 ```
 
+## hashcat
+A tool to get the plain password from hashed one.
+```
+hashcat -m <mode> -o <output file> <hashed password file> <wordlist file>
+```
+Modes are defined in the following page.
+https://hashcat.net/wiki/doku.php?id=example_hashes
+
+For example, if we want to decrypt SHA-512 hash value + salt by using rockyou.txt, we should run the following command:
+```
+hashcat -m 1710 -o cracked.txt hash.txt rockyou.txt
+```
+, then, the above command outputs cracked password to cracked.txt.
+
+
 ## Webpages 
 Webpages to get the plain password from hashed one, as follows:
 ### Hashes
