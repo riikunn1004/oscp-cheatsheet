@@ -306,7 +306,7 @@ strings <file name>
 echo "<username> ALL=(root) NOPASSWD: ALL" >> /etc/sudoers
 ```
 
-### SUID
+## SUID
 The privileged mode can be run if the suid for the script is enabled. 
 For example, if we want to run the script, named '.suid_bash', with root privilege, 
 ```
