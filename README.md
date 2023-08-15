@@ -61,7 +61,7 @@ This repository describes cheat sheet and knowledge for OSCP.
     - [Show file type](#show-file-type)
     - [Show the strings of printable characters in files](#show-the-strings-of-printable-characters-in-files)
   - [Disable password checking for sudo](#disable-password-checking-for-sudo)
-    - [SUID](#suid)
+  - [SUID](#suid)
   - [DNS](#dns)
     - [Specify referred DNS server](#specify-referred-dns-server)
   - [String Processing](#string-processing)
