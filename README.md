@@ -114,6 +114,15 @@ nmap -sV -T4 -Pn <Target IP Address>
 `-A`: Detect OS and its version.  
 `-p`: Specify range of ports. Scan all ports (1-65535) if using the option `-p-`  
 
+## RustNmap
+This tool is faster tool than nmap.
+https://github.com/RustScan/RustScan
+
+```
+rustscan -a <target ip> -- <nmap options>
+```
+
+
 ## Windows Privilege Escalation
 ### PowerUp.ps1
 This script enumerates the privileges vulnerabilities in Windows 
@@ -125,6 +134,10 @@ https://github.com/PowerShellMafia/PowerSploit/blob/master/Privesc/PowerUp.ps1
 Invoke-PrivescAudit [-HTMLReport]
 ```
 Note that this tool output "COMPUTER.username.html" if the `-HTMLReport` is enabled.
+
+### SeImpersonatePrivilege
+#### PrintSpoofer
+https://github.com/itm4n/PrintSpoofer
 
 ## Linux Privilege Escalation
 ### LinPEAS
@@ -354,6 +367,15 @@ New-Item <filename> -Type File
 type <filename>
 ```
 
+### Get a file via HTTP (equivalent to wget)
+```
+Invoke-WebRequest -Uri http://example.com/file.zip -OutFile C:\path\to\save\file.zip
+```
+```
+iwr http://example.com/file.zip -OutFile C:\path\to\save\file.zip
+```
+
+
 # Python Standard Library
 ## Run HTTP Server
 ### python3
@@ -431,6 +453,8 @@ https://blog.cloudflare.com/inside-shellshock/
 ## Kali linux on docker for Mac
 https://5kyr153r.hatenablog.jp/entry/2022/11/14/104548 (Japanese)
 https://www.kali.org/docs/general-use/novnc-kali-in-browser/
+
+
 
 
 
