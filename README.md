@@ -13,13 +13,25 @@ This repository describes cheat sheet and knowledge for OSCP.
     - [nmap](#nmap)
       - [Example](#example)
       - [Options](#options)
+  - [RustNmap](#rustnmap)
   - [Windows Privilege Escalation](#windows-privilege-escalation)
     - [PowerUp.ps1](#powerupps1)
     - [Scan](#scan)
-- [Brute Force Attack](#brute-force-attack)
-  - [Password](#password)
-    - [hydra](#hydra)
+    - [SeImpersonatePrivilege](#seimpersonateprivilege)
+      - [PrintSpoofer](#printspoofer)
+  - [Linux Privilege Escalation](#linux-privilege-escalation)
+    - [LinPEAS](#linpeas)
+    - [pspy](#pspy)
+- [Password Cracking](#password-cracking)
+  - [hydra](#hydra)
       - [Example](#example-1)
+  - [John the ripper](#john-the-ripper)
+      - [Example](#example-2)
+  - [hashcat](#hashcat)
+  - [Webpages](#webpages)
+    - [Hashes](#hashes)
+    - [craskstation](#craskstation)
+- [Brute Force Attack](#brute-force-attack)
   - [Directory](#directory)
     - [dirb](#dirb)
   - [File](#file)
@@ -55,6 +67,8 @@ This repository describes cheat sheet and knowledge for OSCP.
     - [Run command as other user](#run-command-as-other-user)
     - [Show file type](#show-file-type)
     - [Show the strings of printable characters in files](#show-the-strings-of-printable-characters-in-files)
+  - [Disable password checking for sudo](#disable-password-checking-for-sudo)
+  - [SUID](#suid)
   - [DNS](#dns)
     - [Specify referred DNS server](#specify-referred-dns-server)
   - [String Processing](#string-processing)
@@ -65,11 +79,16 @@ This repository describes cheat sheet and knowledge for OSCP.
   - [Powershell](#powershell)
     - [Create New file](#create-new-file)
     - [Display the contents of a text file](#display-the-contents-of-a-text-file)
+    - [Get a file via HTTP (equivalent to wget)](#get-a-file-via-http-equivalent-to-wget)
 - [Python Standard Library](#python-standard-library)
   - [Run HTTP Server](#run-http-server)
     - [python3](#python3)
     - [python2](#python2)
-- [Metasploit](#metasploit)
+- [Reverse shell](#reverse-shell)
+  - [php-reverse-shell](#php-reverse-shell)
+  - [Reverse shell cheat sheet](#reverse-shell-cheat-sheet)
+  - [Metasploit](#metasploit)
+- [Metasploit](#metasploit-1)
   - [meterpreter](#meterpreter)
   - [Get system info](#get-system-info)
     - [Start shell](#start-shell)
@@ -83,12 +102,13 @@ This repository describes cheat sheet and knowledge for OSCP.
 - [Others](#others)
   - [References for OSCP](#references-for-oscp)
     - [GTFOBins](#gtfobins)
-    - [Reverse shell cheat sheet](#reverse-shell-cheat-sheet)
-      - [php-reverse-shell](#php-reverse-shell)
+    - [Reverse shell cheat sheet](#reverse-shell-cheat-sheet-1)
+      - [php-reverse-shell](#php-reverse-shell-1)
       - [Groovy Reverse shell](#groovy-reverse-shell)
     - [HTML Security CheatSheet](#html-security-cheatsheet)
   - [References for vulnerabilities](#references-for-vulnerabilities)
     - [Shellshock (CVE-2014-6271)](#shellshock-cve-2014-6271)
+  - [Kali linux on docker for Mac](#kali-linux-on-docker-for-mac)
 - [LICENSE](#license)
 
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
@@ -106,6 +126,15 @@ nmap -sV -T4 -Pn <Target IP Address>
 `-A`: Detect OS and its version.  
 `-p`: Specify range of ports. Scan all ports (1-65535) if using the option `-p-`  
 
+## RustNmap
+This tool is faster tool than nmap.
+https://github.com/RustScan/RustScan
+
+```
+rustscan -a <target ip> -- <nmap options>
+```
+
+
 ## Windows Privilege Escalation
 ### PowerUp.ps1
 This script enumerates the privileges vulnerabilities in Windows 
@@ -118,10 +147,25 @@ Invoke-PrivescAudit [-HTMLReport]
 ```
 Note that this tool output "COMPUTER.username.html" if the `-HTMLReport` is enabled.
 
+### SeImpersonatePrivilege
+#### PrintSpoofer
+https://github.com/itm4n/PrintSpoofer
 
-# Brute Force Attack
-## Password
-### hydra
+## Linux Privilege Escalation
+### LinPEAS
+LinePEAS is a script which detect the possible path to escalate privilege on Linux etc...
+```
+https://github.com/carlospolop/PEASS-ng/tree/master/linPEAS
+```
+
+### pspy
+Monitoring process tool in real time.
+```
+https://github.com/DominicBreuker/pspy
+```
+
+# Password Cracking
+## hydra
 #### Example
 - Brute force attack for username and password (HTTP POST)
 ```console
@@ -135,6 +179,38 @@ We can set the following variables when specifying the list file:
 `^USER^`: Replace this string in \<query parameter\> with the username listed in \<username list file\>  
 `^PASSWORD^`: Replace this string in \<query parameter\> with the password listed in \<password list file\>
 
+## John the ripper
+A tool to get the plain password from hashed one.
+
+#### Example
+```
+john --wordlist=rockyou.txt hash.txt
+```
+
+## hashcat
+A tool to get the plain password from hashed one.
+```
+hashcat -m <mode> -o <output file> <hashed password file> <wordlist file>
+```
+Modes are defined in the following page.
+https://hashcat.net/wiki/doku.php?id=example_hashes
+
+For example, if we want to decrypt SHA-512 hash value + salt by using rockyou.txt, we should run the following command:
+```
+hashcat -m 1710 -o cracked.txt hash.txt rockyou.txt
+```
+, then, the above command outputs cracked password to cracked.txt.
+
+
+## Webpages 
+Webpages to get the plain password from hashed one, as follows:
+### Hashes
+https://hashes.com/en/decrypt/hash
+
+### craskstation
+https://crackstation.net/
+
+# Brute Force Attack
 ## Directory
 ### dirb
 ```
@@ -260,6 +336,24 @@ file <file name>
 strings <file name>
 ```
 
+## Disable password checking for sudo
+```
+echo "<username> ALL=(root) NOPASSWD: ALL" >> /etc/sudoers
+```
+
+## SUID
+The privileged mode can be run if the suid for the script is enabled. 
+For example, if we want to run the script, named '.suid_bash', with root privilege, 
+```
+-rwsr-sr-x 1 root  root  1113504 Jul 22  2020  .suid_bash
+```
+we should run the following command: 
+```
+./.suid_bash -p
+```
+https://stackoverflow.com/questions/63689353/suid-binary-privilege-escalation
+
+
 ## DNS
 ### Specify referred DNS server
 ```
@@ -293,6 +387,15 @@ New-Item <filename> -Type File
 type <filename>
 ```
 
+### Get a file via HTTP (equivalent to wget)
+```
+Invoke-WebRequest -Uri http://example.com/file.zip -OutFile C:\path\to\save\file.zip
+```
+```
+iwr http://example.com/file.zip -OutFile C:\path\to\save\file.zip
+```
+
+
 # Python Standard Library
 ## Run HTTP Server
 ### python3
@@ -304,7 +407,17 @@ python -m http.server <port>
 python -m SimpleHTTPServer <port>
 ```
 
+# Reverse shell
+## php-reverse-shell
+```
+https://pentestmonkey.net/tools/web-shells/php-reverse-shell
+```
 
+## Reverse shell cheat sheet
+https://github.com/swisskyrepo/PayloadsAllTheThings/blob/master/Methodology%20and%20Resources/Reverse%20Shell%20Cheatsheet.md
+
+## Metasploit
+Refer  [msfvenom](#msfvenom)
 # Metasploit
 ## meterpreter
 ## Get system info
@@ -369,6 +482,13 @@ This cheat sheet shows the XSS payloads against each browser.
 ## References for vulnerabilities
 ### Shellshock (CVE-2014-6271)
 https://blog.cloudflare.com/inside-shellshock/
+
+## Kali linux on docker for Mac
+https://5kyr153r.hatenablog.jp/entry/2022/11/14/104548 (Japanese)
+https://www.kali.org/docs/general-use/novnc-kali-in-browser/
+
+
+
 
 
 
