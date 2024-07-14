@@ -51,6 +51,7 @@ This repository describes cheat sheet and knowledge for OSCP.
       - [exploit](#exploit)
 - [SSTI (Server-Side Template Injection)](#ssti-server-side-template-injection)
   - [PayloadsAllTheThings](#payloadsallthethings)
+  - [How to identify the Vulnerability SSTI?](#how-to-identify-the-vulnerability-ssti)
     - [Mako](#mako)
       - [RCE](#rce)
 - [SQL Injection](#sql-injection)
@@ -61,6 +62,10 @@ This repository describes cheat sheet and knowledge for OSCP.
 - [Aggregating Sensitive Information](#aggregating-sensitive-information)
   - [truffleHog](#trufflehog)
     - [Scan GitHub](#scan-github)
+- [Fuzz](#fuzz)
+  - [fuff](#fuff)
+    - [Basic usage](#basic-usage)
+    - [Special Character Fuzz](#special-character-fuzz)
 - [Linux command](#linux-command)
   - [Basic command](#basic-command)
     - [Show allowing commands as root user](#show-allowing-commands-as-root-user)
@@ -68,6 +73,8 @@ This repository describes cheat sheet and knowledge for OSCP.
     - [Show file type](#show-file-type)
     - [Show the strings of printable characters in files](#show-the-strings-of-printable-characters-in-files)
     - [Read from standard input and write to standard output and files](#read-from-standard-input-and-write-to-standard-output-and-files)
+    - [rlwrap](#rlwrap)
+      - [nc (Listen port 9001)](#nc-listen-port-9001)
   - [Disable password checking for sudo](#disable-password-checking-for-sudo)
   - [Docker](#docker)
     - [Get a subsection in JSON format](#get-a-subsection-in-json-format)
@@ -107,6 +114,8 @@ This repository describes cheat sheet and knowledge for OSCP.
 - [Others](#others)
   - [References for OSCP](#references-for-oscp)
     - [GTFOBins](#gtfobins)
+  - [Word List](#word-list)
+    - [SecLists](#seclists)
     - [Reverse shell cheat sheet](#reverse-shell-cheat-sheet-1)
       - [php-reverse-shell](#php-reverse-shell-1)
       - [Groovy Reverse shell](#groovy-reverse-shell)
@@ -285,6 +294,12 @@ The parameter can be specified as follow:
 ## PayloadsAllTheThings
 https://github.com/swisskyrepo/PayloadsAllTheThings/blob/master/Server%20Side%20Template%20Injection/README.md
 
+## How to identify the Vulnerability SSTI?
+```
+${{<%[%’”}}%\.
+```
+https://medium.com/@aslam.mahimkar/hackthebox-busqueda-writeup-c4ae57a89fd4
+
 ### Mako
 #### RCE
 ``` shell
@@ -315,6 +330,18 @@ Docker
 ``` shell
 docker run --rm -it -v "$PWD:/pwd" trufflesecurity/trufflehog:latest github --repo <Repository URL></Repository>
 ```
+
+# Fuzz
+## fuff
+### Basic usage
+```
+fuff -request <request file> -request-proto http -w <wordlist (e.g. SecList)>
+```
+### Special Character Fuzz
+```
+fuff -request test.req -request-proto http -w /usr/share/seclists/Fuzzing/special-chars.txt
+```
+
 # Linux command
 
 ## Basic command
@@ -344,6 +371,13 @@ strings <file name>
 ### Read from standard input and write to standard output and files
 ```
 echo <text> | tee -a <file>
+```
+
+### rlwrap
+https://linux.die.net/man/1/rlwrap
+#### nc (Listen port 9001)
+```
+rlwrap -cAr nc -lnvp 9001
 ```
 
 ## Disable password checking for sudo
@@ -484,6 +518,10 @@ https://github.com/rinetd/BurpSuite-1/blob/master/CheatSheet.md
 ### GTFOBins
 This website is a curated list of Unix binaries that can be used to bypass local security restrictions in misconfigured systems.  
 https://gtfobins.github.io/
+
+## Word List
+### SecLists
+https://github.com/danielmiessler/SecLists
 
 ### Reverse shell cheat sheet
 https://github.com/swisskyrepo/PayloadsAllTheThings/blob/master/Methodology%20and%20Resources/Reverse%20Shell%20Cheatsheet.md
