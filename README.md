@@ -104,6 +104,7 @@ This repository describes cheat sheet and knowledge for OSCP.
       - [input()](#input)
 - [PHP](#php)
   - [Detect exploitable function (e.g. RCE)](#detect-exploitable-function-eg-rce)
+  - [phar](#phar)
 - [Reverse shell](#reverse-shell)
   - [php-reverse-shell](#php-reverse-shell)
   - [Reverse shell cheat sheet](#reverse-shell-cheat-sheet)
@@ -567,6 +568,10 @@ https://github.com/teambi0s/dfunc-bypasser/tree/master
 ```
 python dfunc-bypasser.py --url https://example.com/phpinfo.php
 ```
+
+## phar
+phar is achived PHP files.
+We can access ``phar://<phar file>/<.php filename>``
 
 # Reverse shell
 ## php-reverse-shell
