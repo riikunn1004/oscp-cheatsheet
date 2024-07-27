@@ -6,6 +6,8 @@ This repository describes cheat sheet and knowledge for OSCP.
 <!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
 **Table of Contents**
 
+- [oscp-cheatsheet](#oscp-cheatsheet)
+- [Contents](#contents)
 - [Enumeration](#enumeration)
   - [Network](#network)
     - [nmap](#nmap)
@@ -48,7 +50,7 @@ This repository describes cheat sheet and knowledge for OSCP.
         - [bitquark-subdomains-top100000.txt](#bitquark-subdomains-top100000txt)
 - [JWT (JSON Web Token) exploit](#jwt-json-web-token-exploit)
     - [Debugger](#debugger)
-    - [jwt_tool](#jwt_tool)
+    - [jwt\_tool](#jwt_tool)
       - [tampering](#tampering)
       - [exploit](#exploit)
 - [SSTI (Server-Side Template Injection)](#ssti-server-side-template-injection)
@@ -74,6 +76,8 @@ This repository describes cheat sheet and knowledge for OSCP.
     - [Basic usage](#basic-usage)
     - [Special Character Fuzz](#special-character-fuzz)
     - [Subdomain Fuzz](#subdomain-fuzz)
+- [Depixelize](#depixelize)
+  - [Depix](#depix)
 - [Git](#git)
   - [Dump .git](#dump-git)
 - [Linux command](#linux-command)
@@ -96,6 +100,7 @@ This repository describes cheat sheet and knowledge for OSCP.
     - [Remove white spaces](#remove-white-spaces)
   - [SMB](#smb)
     - [smbclient](#smbclient)
+  - [Extract image from PDF](#extract-image-from-pdf)
 - [Windows command](#windows-command)
   - [Powershell](#powershell)
     - [Create New file](#create-new-file)
@@ -448,6 +453,19 @@ Connection: close
 site=http%3A%2F%2Fgoogle.com&debug=1
 ```
 
+# Depixelize
+## Depix
+https://github.com/spipm/Depix
+Depix is a PoC for a technique to recover plaintext from pixelized screenshot.
+
+```shell
+python3 depix.py \
+    -p /path/to/your/input/image.png \
+    -s images/searchimages/debruinseq_notepad_Windows10_closeAndSpaced.png \
+    -o /path/to/your/output.png
+```
+
+
 # Git
 ## Dump .git
 https://github.com/arthaud/git-dumper
@@ -546,6 +564,12 @@ smbclient -L <target>  # Enumerate sharenames
 smbclient //<target>/<sharename>
 get <filename>
 ```
+
+## Extract image from PDF
+```shell
+pdfimages in.pdf outputimage
+```
+
 
 # Windows command
 ## Powershell
