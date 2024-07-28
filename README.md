@@ -6,6 +6,8 @@ This repository describes cheat sheet and knowledge for OSCP.
 <!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
 **Table of Contents**
 
+- [oscp-cheatsheet](#oscp-cheatsheet)
+- [Contents](#contents)
 - [Enumeration](#enumeration)
   - [Network](#network)
     - [nmap](#nmap)
@@ -42,13 +44,13 @@ This repository describes cheat sheet and knowledge for OSCP.
   - [Directory](#directory-1)
     - [dirb](#dirb-2)
     - [gobuster](#gobuster-1)
-  - [DNS subdomains](#dns-subdomains)
+  - [subdomains](#subdomains)
     - [gobuster](#gobuster-2)
       - [Wordlist example](#wordlist-example)
         - [bitquark-subdomains-top100000.txt](#bitquark-subdomains-top100000txt)
 - [JWT (JSON Web Token) exploit](#jwt-json-web-token-exploit)
     - [Debugger](#debugger)
-    - [jwt_tool](#jwt_tool)
+    - [jwt\_tool](#jwt_tool)
       - [tampering](#tampering)
       - [exploit](#exploit)
 - [SSTI (Server-Side Template Injection)](#ssti-server-side-template-injection)
@@ -90,7 +92,9 @@ This repository describes cheat sheet and knowledge for OSCP.
     - [rlwrap](#rlwrap)
       - [nc (Listen port 9001)](#nc-listen-port-9001)
     - [Extract information from /etc/passwd](#extract-information-from-etcpasswd)
-  - [Disable password checking for sudo](#disable-password-checking-for-sudo)
+  - [sudoers](#sudoers)
+    - [Disable password checking for sudo](#disable-password-checking-for-sudo)
+    - [Running all commands are allowed by sudo](#running-all-commands-are-allowed-by-sudo)
   - [Docker](#docker)
     - [Get a subsection in JSON format](#get-a-subsection-in-json-format)
   - [SUID](#suid)
@@ -300,11 +304,18 @@ gobuster dir -u $URL -w /usr/share/wordlists/dirb/common.txt -t 100
 ```shell
 gobuster dir -u $URL -w /usr/share/wordlists/dirbuster/directory-list-2.3-medium.txt -t 100
 ```
-## DNS subdomains
+## subdomains
 ### gobuster
+Find Vhosts:
 ```
-gobuster dns -d <domain name> -w <dns subdomains wordlist>
+gobuster vhost -w /usr/share/seclists/Discovery/DNS/bitquark-subdomains-top100000.txt -u http://permx.htb --append-domain
 ```
+
+Find DNS subdomains:
+```
+gobuster dns -d <domain name> -w /usr/share/seclists/Discovery/DNS/bitquark-subdomains-top100000.txt
+```
+
 #### Wordlist example
 ##### bitquark-subdomains-top100000.txt
 https://github.com/danielmiessler/SecLists/blob/master/Discovery/DNS/bitquark-subdomains-top100000.txt
@@ -570,10 +581,19 @@ cat /etc/passwd | grep -v -e false -e nologin -e sync
 false, nologin: Disallow login
 sync: Sync disk(?)
 
-## Disable password checking for sudo
-```
+## sudoers
+### Disable password checking for sudo
+```shell
 echo "<username> ALL=(root) NOPASSWD: ALL" >> /etc/sudoers
 ```
+
+### Running all commands are allowed by sudo
+In this example, the user "mtz" is allowed to run all commands by sudo.
+```shell
+echo "mtz    ALL=(ALL:ALL) ALL" | tee -a /etc/sudoers
+```
+
+
 
 ## Docker
 ### Get a subsection in JSON format
