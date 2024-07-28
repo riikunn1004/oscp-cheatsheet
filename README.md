@@ -89,6 +89,7 @@ This repository describes cheat sheet and knowledge for OSCP.
     - [Show file type](#show-file-type)
     - [Show the strings of printable characters in files](#show-the-strings-of-printable-characters-in-files)
     - [Read from standard input and write to standard output and files](#read-from-standard-input-and-write-to-standard-output-and-files)
+    - [Find files created by a particular user](#find-files-created-by-a-particular-user)
     - [rlwrap](#rlwrap)
       - [nc (Listen port 9001)](#nc-listen-port-9001)
     - [Extract information from /etc/passwd](#extract-information-from-etcpasswd)
@@ -564,6 +565,11 @@ strings <file name>
 ### Read from standard input and write to standard output and files
 ```
 echo <text> | tee -a <file>
+```
+
+### Find files created by a particular user
+```shell
+find / -type f -user user
 ```
 
 ### rlwrap
