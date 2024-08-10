@@ -6,16 +6,20 @@ This repository describes cheat sheet and knowledge for OSCP.
 <!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
 **Table of Contents**
 
+- [oscp-cheatsheet](#oscp-cheatsheet)
+- [Contents](#contents)
 - [Enumeration](#enumeration)
   - [Network](#network)
     - [nmap](#nmap)
       - [Basic commands](#basic-commands)
       - [Options](#options)
     - [UDP scanning](#udp-scanning)
+    - [Check for any known vulnerability by nmap](#check-for-any-known-vulnerability-by-nmap)
   - [RustScan](#rustscan)
     - [Basic command](#basic-command)
     - [Detect service and version](#detect-service-and-version)
-    - [Enumeration for UDO](#enumeration-for-udo)
+    - [Enumeration for UDP](#enumeration-for-udp)
+    - [Check for any known vulnerability by rustscan](#check-for-any-known-vulnerability-by-rustscan)
   - [Windows Privilege Escalation](#windows-privilege-escalation)
     - [PowerUp.ps1](#powerupps1)
     - [Scan](#scan)
@@ -34,21 +38,20 @@ This repository describes cheat sheet and knowledge for OSCP.
     - [Hashes](#hashes)
     - [craskstation](#craskstation)
 - [Brute Force Attack](#brute-force-attack)
-  - [Directory](#directory)
-    - [dirb](#dirb)
   - [File](#file)
-      - [dirb](#dirb-1)
+      - [dirb](#dirb)
     - [gobuster](#gobuster)
-  - [Directory](#directory-1)
-    - [dirb](#dirb-2)
+  - [Directory](#directory)
+    - [dirb](#dirb-1)
     - [gobuster](#gobuster-1)
+    - [dirsearch](#dirsearch)
   - [subdomains](#subdomains)
     - [gobuster](#gobuster-2)
       - [Wordlist example](#wordlist-example)
         - [bitquark-subdomains-top100000.txt](#bitquark-subdomains-top100000txt)
 - [JWT (JSON Web Token) exploit](#jwt-json-web-token-exploit)
     - [Debugger](#debugger)
-    - [jwt_tool](#jwt_tool)
+    - [jwt\_tool](#jwt_tool)
       - [tampering](#tampering)
       - [exploit](#exploit)
 - [SSTI (Server-Side Template Injection)](#ssti-server-side-template-injection)
@@ -149,6 +152,7 @@ This repository describes cheat sheet and knowledge for OSCP.
   - [Malicious conf file to get root privilege](#malicious-conf-file-to-get-root-privilege)
 - [BurpSuite](#burpsuite)
   - [Hot Keys](#hot-keys)
+- [GraphQL](#graphql)
 - [Others](#others)
   - [References for OSCP](#references-for-oscp)
     - [GTFOBins](#gtfobins)
@@ -183,6 +187,11 @@ nmap -sV -T4 -Pn <Target IP Address>
 sudo nmap -sU -p- $IP --min-rate=10000 -v
 ```
 
+### Check for any known vulnerability by nmap
+```shell
+nmap --script vuln -oA vulnscan $IP
+```
+
 ## RustScan
 This tool is faster tool than nmap.
 https://github.com/RustScan/RustScan
@@ -198,9 +207,14 @@ Detect service and versions in 22/tcp and 80/tcp
 rustscan -a $IP --ports 22,80 -- -sC -sV
 ```
 
-### Enumeration for UDO
+### Enumeration for UDP
 ```
 rustscan -a $IP --udp -- -Pn -T4
+```
+
+### Check for any known vulnerability by rustscan
+```shell
+rustscan -a $IP -- --script vuln -oA vulnscan
 ```
 
 
@@ -281,11 +295,6 @@ https://hashes.com/en/decrypt/hash
 https://crackstation.net/
 
 # Brute Force Attack
-## Directory
-### dirb
-```
-dirb <target URL>
-```
 
 ## File
 #### dirb
@@ -311,6 +320,11 @@ gobuster dir -u $URL -w /usr/share/wordlists/dirb/common.txt -t 100
 ```shell
 gobuster dir -u $URL -w /usr/share/wordlists/dirbuster/directory-list-2.3-medium.txt -t 100
 ```
+### dirsearch
+```shell
+dirsearch -u <target url>
+```
+
 ## subdomains
 ### gobuster
 Find Vhosts:
@@ -395,20 +409,22 @@ For websocket, sqlmap can inject SQL logic:
 sqlmap -u "ws://soc-player.soccer.htb:9091" --data '{"id": "*"}' --dbs --threads 10 -
 level 5 --risk 3 --batch
 ```
+`--dbs`: enumerate database list
 
 ### second request
 After sending the tampered request, send the second request to check the response.
 ```shell
 sqlmap -r req.txt --second-req=secreq.txt --dbs --threads 5 --tamper=space2comment --batch
 ```
+
 'tamper' is explained below:
 [Tamper](https://book.hacktricks.xyz/pentesting-web/sql-injection/sqlmap#tamper)
 
 ### enumerate tables
 ```shell
-sqlmap -r req.txt --second-req=secreq.txt --threads 5 --tamper=space2comment --tables --batch -D mysql
+sqlmap -r req.txt --second-req=secreq.txt --threads 5 --tamper=space2comment --tables --batch -D database_name
 ```
-`-D`: specify DBS (e.g, mysql)
+`-D`: database name
 
 ### extract data from table
 ```shell
@@ -893,6 +909,9 @@ ssh -i root root@<target ip>
 # BurpSuite
 ## Hot Keys
 https://github.com/rinetd/BurpSuite-1/blob/master/CheatSheet.md
+
+# GraphQL
+https://book.hacktricks.xyz/network-services-pentesting/pentesting-web/graphql
 
 # Others
 
