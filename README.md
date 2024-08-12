@@ -15,11 +15,12 @@ This repository describes cheat sheet and knowledge for OSCP.
       - [Options](#options)
     - [UDP scanning](#udp-scanning)
     - [Check for any known vulnerability by nmap](#check-for-any-known-vulnerability-by-nmap)
-  - [RustScan](#rustscan)
-    - [Basic command](#basic-command)
-    - [Detect service and version](#detect-service-and-version)
-    - [Enumeration for UDP](#enumeration-for-udp)
-    - [Check for any known vulnerability by rustscan](#check-for-any-known-vulnerability-by-rustscan)
+    - [RustScan](#rustscan)
+      - [Basic command](#basic-command)
+      - [Detect service and version](#detect-service-and-version)
+      - [Enumeration for UDP](#enumeration-for-udp)
+      - [Check for any known vulnerability by rustscan](#check-for-any-known-vulnerability-by-rustscan)
+    - [/dev/tcp instead of nmap and rustscan](#devtcp-instead-of-nmap-and-rustscan)
   - [Windows Privilege Escalation](#windows-privilege-escalation)
     - [PowerUp.ps1](#powerupps1)
     - [Scan](#scan)
@@ -192,31 +193,37 @@ sudo nmap -sU -p- $IP --min-rate=10000 -v
 nmap --script vuln -oA vulnscan $IP
 ```
 
-## RustScan
+### RustScan
 This tool is faster tool than nmap.
 https://github.com/RustScan/RustScan
 
-### Basic command
+#### Basic command
 ```
 rustscan -a <target ip> -- <nmap options>
 ```
 
-### Detect service and version
+#### Detect service and version
 Detect service and versions in 22/tcp and 80/tcp
 ```
 rustscan -a $IP --ports 22,80 -- -sC -sV
 ```
 
-### Enumeration for UDP
+#### Enumeration for UDP
 ```
 rustscan -a $IP --udp -- -Pn -T4
 ```
 
-### Check for any known vulnerability by rustscan
+#### Check for any known vulnerability by rustscan
 ```shell
 rustscan -a $IP -- --script vuln -oA vulnscan
 ```
 
+### /dev/tcp instead of nmap and rustscan
+The following command is enumerating opened tcp ports (0-1000) in 172.19.0.1 (e.g. 172.19.0.x is generally used for docker network).
+
+```shell
+ for PORT in {0..1000}; do timeout 1 bash -c "</dev/tcp/172.19.0.1/$PORT &>/dev/null" 2>/dev/null &&  echo "port $PORT is open"; done
+```
 
 
 ## Windows Privilege Escalation
