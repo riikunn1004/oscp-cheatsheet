@@ -6,6 +6,8 @@ This repository describes cheat sheet and knowledge for OSCP.
 <!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
 **Table of Contents**
 
+- [oscp-cheatsheet](#oscp-cheatsheet)
+- [Contents](#contents)
 - [Enumeration](#enumeration)
   - [Network](#network)
     - [nmap](#nmap)
@@ -50,7 +52,7 @@ This repository describes cheat sheet and knowledge for OSCP.
         - [bitquark-subdomains-top100000.txt](#bitquark-subdomains-top100000txt)
 - [JWT (JSON Web Token) exploit](#jwt-json-web-token-exploit)
     - [Debugger](#debugger)
-    - [jwt_tool](#jwt_tool)
+    - [jwt\_tool](#jwt_tool)
       - [tampering](#tampering)
       - [exploit](#exploit)
 - [SSTI (Server-Side Template Injection)](#ssti-server-side-template-injection)
@@ -107,6 +109,8 @@ This repository describes cheat sheet and knowledge for OSCP.
     - [Get a subsection in JSON format](#get-a-subsection-in-json-format)
   - [SUID](#suid)
     - [Find files with the SUID bit set](#find-files-with-the-suid-bit-set)
+    - [Change the ownership and apply the SUID](#change-the-ownership-and-apply-the-suid)
+    - [Spawn a shell with the effective UID](#spawn-a-shell-with-the-effective-uid)
     - [Run files with suid](#run-files-with-suid)
   - [DNS](#dns)
     - [Specify referred DNS server](#specify-referred-dns-server)
@@ -676,9 +680,24 @@ docker inspect --format='{{json .Config}}' $INSTANCE_ID
 ```
 
 ## SUID
+SUID is "set user id".
+If the SUID is set, we can run the program as the ownership user.
+
 ### Find files with the SUID bit set
 ```shell
  find / -type f -perm -4000 2>/dev/null
+```
+
+### Change the ownership and apply the SUID
+```shell
+chown root:root bash
+chmod 4755 bash
+```
+4000 is the flag to apply the SUID.
+
+### Spawn a shell with the effective UID
+```shell
+bash -p
 ```
 
 ### Run files with suid
