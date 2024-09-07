@@ -6,6 +6,8 @@ This repository describes cheat sheet and knowledge for OSCP.
 <!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
 **Table of Contents**
 
+- [oscp-cheatsheet](#oscp-cheatsheet)
+- [Contents](#contents)
 - [Enumeration](#enumeration)
   - [Network](#network)
     - [nmap](#nmap)
@@ -38,6 +40,7 @@ This repository describes cheat sheet and knowledge for OSCP.
   - [John the ripper](#john-the-ripper)
       - [Example](#example-1)
   - [hashcat](#hashcat)
+    - [Generate wordlist](#generate-wordlist)
   - [Webpages](#webpages)
     - [Hashes](#hashes)
     - [craskstation](#craskstation)
@@ -55,7 +58,7 @@ This repository describes cheat sheet and knowledge for OSCP.
         - [bitquark-subdomains-top100000.txt](#bitquark-subdomains-top100000txt)
 - [JWT (JSON Web Token) exploit](#jwt-json-web-token-exploit)
     - [Debugger](#debugger)
-    - [jwt_tool](#jwt_tool)
+    - [jwt\_tool](#jwt_tool)
       - [tampering](#tampering)
       - [exploit](#exploit)
 - [SSTI (Server-Side Template Injection)](#ssti-server-side-template-injection)
@@ -336,6 +339,20 @@ For example, if we want to decrypt SHA-512 hash value + salt by using rockyou.tx
 hashcat -m 1710 -o cracked.txt hash.txt rockyou.txt
 ```
 , then, the above command outputs cracked password to cracked.txt.
+
+### Generate wordlist
+Generate new wordlists based on original wordl and rule.
+```shell
+hashcat --stdout --force <origin_word_filename> -r <rule file>
+```
+
+Rule file is located in `/usr/share/hashcat/rules`.
+For example, original word is saved in `origin.txt`, and uses `/usr/share/hashcat/rules/best64.rule` as rule file, as follow:
+```shell
+hashcat --stdout --force origin.txt -r /usr/share/hashcat/rules/best64.rule
+```
+
+
 
 
 ## Webpages 
