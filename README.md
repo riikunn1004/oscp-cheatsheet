@@ -6,6 +6,8 @@ This repository describes cheat sheet and knowledge for OSCP.
 <!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
 **Table of Contents**
 
+- [oscp-cheatsheet](#oscp-cheatsheet)
+- [Contents](#contents)
 - [Enumeration](#enumeration)
   - [Network](#network)
     - [nmap](#nmap)
@@ -56,7 +58,7 @@ This repository describes cheat sheet and knowledge for OSCP.
         - [bitquark-subdomains-top100000.txt](#bitquark-subdomains-top100000txt)
 - [JWT (JSON Web Token) exploit](#jwt-json-web-token-exploit)
     - [Debugger](#debugger)
-    - [jwt_tool](#jwt_tool)
+    - [jwt\_tool](#jwt_tool)
       - [tampering](#tampering)
       - [exploit](#exploit)
 - [SSTI (Server-Side Template Injection)](#ssti-server-side-template-injection)
@@ -125,6 +127,7 @@ This repository describes cheat sheet and knowledge for OSCP.
     - [Remove white spaces](#remove-white-spaces)
   - [SMB](#smb)
     - [smbclient](#smbclient)
+    - [smbmap](#smbmap)
   - [Extract image from PDF](#extract-image-from-pdf)
 - [Windows command](#windows-command)
   - [Powershell](#powershell)
@@ -840,6 +843,28 @@ smbclient -L <target>  # Enumerate sharenames
 smbclient //<target>/<sharename>
 get <filename>
 ```
+### smbmap
+```shell
+smbmap -H $IP
+```
+
+smbmap outputs the disk name and permissions, such as:
+```shell
+[+] Guest session       IP: 10.129.13.52:445    Name: friendzone.red                           
+        Disk                                                    Permissions     Comment
+        ----                                                    -----------     -------
+        print$                                                  NO ACCESS       Printer Drivers
+        Files                                                   NO ACCESS       FriendZone Samba Server Files /etc/Files
+        general                                                 READ ONLY       FriendZone Samba Server Files
+        Development                                             READ, WRITE     FriendZone Samba Server Files
+        IPC$                                                    NO ACCESS       IPC Service (FriendZone server (Samba, Ubuntu))
+```
+We may access the smb server by using smbclient. For example,
+```shell
+smbclient //$IP/general
+```
+
+
 
 ## Extract image from PDF
 ```shell
