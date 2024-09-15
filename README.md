@@ -123,6 +123,7 @@ This repository describes cheat sheet and knowledge for OSCP.
     - [Run files with suid](#run-files-with-suid)
   - [DNS](#dns)
     - [Specify referred DNS server](#specify-referred-dns-server)
+    - [Try zone transfer](#try-zone-transfer)
   - [String Processing](#string-processing)
     - [Remove white spaces](#remove-white-spaces)
   - [SMB](#smb)
@@ -829,6 +830,15 @@ https://stackoverflow.com/questions/63689353/suid-binary-privilege-escalation
 nslookup
 server <DNS Server>
 ```
+
+### Try zone transfer
+```shell
+dig axfr $Domain  @$IP
+dig axfr @$IP
+```
+[HackTricks - Pentesting DNS](https://book.hacktricks.xyz/network-services-pentesting/pentesting-dns)
+
+
 
 ## String Processing
 ### Remove white spaces
