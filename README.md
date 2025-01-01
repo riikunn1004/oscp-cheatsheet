@@ -382,7 +382,7 @@ https://crackstation.net/
 ## File
 #### dirb
 ```
-dirb <targetURL> -X <extension list separated by comma (e.g. .sh, .pl, .txt, .php, .py)>
+dirb $URL -X <extension list separated by comma (e.g. .sh, .pl, .txt, .php, .py)>
 ```
 
 ### gobuster
@@ -412,12 +412,12 @@ dirsearch -u <target url>
 ### gobuster
 Find Vhosts:
 ```
-gobuster vhost -w /usr/share/seclists/Discovery/DNS/bitquark-subdomains-top100000.txt -u http://permx.htb --append-domain
+gobuster vhost -w /usr/share/seclists/Discovery/DNS/bitquark-subdomains-top100000.txt -u $URL --append-domain
 ```
 
 Find DNS subdomains:
 ```
-gobuster dns -d <domain name> -w /usr/share/seclists/Discovery/DNS/bitquark-subdomains-top100000.txt
+gobuster dns -d $Domain -w /usr/share/seclists/Discovery/DNS/bitquark-subdomains-top100000.txt
 ```
 
 #### Wordlist example
