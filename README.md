@@ -969,6 +969,12 @@ python -m http.server <port>
 python -m SimpleHTTPServer <port>
 ```
 
+## Remote Access
+[wmiexec.py](https://github.com/fortra/impacket/blob/master/examples/wmiexec.py)
+```
+wmiexec.py $Domain/$User:$Password@$IP
+```
+
 
 
 ## Run system command by using dynamic import
