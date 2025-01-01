@@ -135,6 +135,7 @@ This repository describes cheat sheet and knowledge for OSCP.
   - [SMB](#smb)
     - [smbclient](#smbclient)
     - [smbmap](#smbmap)
+  - [mount](#mount)
   - [Extract image from PDF](#extract-image-from-pdf)
 - [Windows command](#windows-command)
   - [Powershell](#powershell)
