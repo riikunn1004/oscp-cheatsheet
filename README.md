@@ -32,6 +32,7 @@ This repository describes cheat sheet and knowledge for OSCP.
     - [Enumerate pods (kubeletctl)](#enumerate-pods-kubeletctl)
     - [Enumerate pods (kubectl)](#enumerate-pods-kubectl)
     - [Scan pods vulnerable to RCE](#scan-pods-vulnerable-to-rce)
+  - [SPN (Service Principal NAme)](#spn-service-principal-name)
 - [Password Cracking](#password-cracking)
   - [hydra](#hydra)
       - [Example](#example)
