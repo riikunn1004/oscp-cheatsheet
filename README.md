@@ -926,7 +926,12 @@ We may access the smb server by using smbclient. For example,
 ```shell
 smbclient //$IP/general
 ```
-
+## mount
+Mount the Windows directory via CIFS by using mount command.
+The advantage is that we can run the command, such as viewing a file, on the linux platform. 
+```
+mount -t cifs -o username=guest //$IP/<disk> /mnt/<disk>
+```
 
 
 ## Extract image from PDF
