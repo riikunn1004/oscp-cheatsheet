@@ -578,12 +578,14 @@ sqlmap -r req.txt --second-req=secreq.txt --threads 5 --tamper=space2comment -T 
 
 # NoSQL Injection
 https://portswigger.net/web-security/nosql-injection
+https://portswigger.net/web-security/nosql-injection#nosql-operator-injection
 
 ## Labs for detecting Syntax injection in MongoDB
 https://portswigger.net/web-security/nosql-injection/lab-nosql-injection-detection
 
 ## Labs for detecting operator injection 
 https://portswigger.net/web-security/nosql-injection/lab-nosql-injection-bypass-authentication
+
 
 # XSS
 ## Polyglot
@@ -1307,6 +1309,9 @@ https://github.com/rinetd/BurpSuite-1/blob/master/CheatSheet.md
 4. "Add $"
 5. Focus on the "Payload" and configure the brute force payloads, such as "Numbers" and "Simple list", etc...
 6. "Start Attack:
+Note1: URL-encode special-characters may need to be disabled.
+Note2: Focus the response size. If there is a request whose length is different, this request may become important information.
+
 
 ![alt text](image.png)
 
