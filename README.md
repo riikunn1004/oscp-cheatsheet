@@ -6,6 +6,8 @@ This repository describes cheat sheet and knowledge for OSCP.
 <!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
 **Table of Contents**
 
+- [oscp-cheatsheet](#oscp-cheatsheet)
+- [Contents](#contents)
 - [Enumeration](#enumeration)
   - [Network](#network)
     - [nmap](#nmap)
@@ -54,11 +56,12 @@ This repository describes cheat sheet and knowledge for OSCP.
     - [dirsearch](#dirsearch)
   - [subdomains](#subdomains)
     - [gobuster](#gobuster-2)
+    - [ffuf](#ffuf)
       - [Wordlist example](#wordlist-example)
         - [bitquark-subdomains-top100000.txt](#bitquark-subdomains-top100000txt)
 - [JWT (JSON Web Token) exploit](#jwt-json-web-token-exploit)
     - [Debugger](#debugger)
-    - [jwt_tool](#jwt_tool)
+    - [jwt\_tool](#jwt_tool)
       - [tampering](#tampering)
       - [exploit](#exploit)
 - [SSTI (Server-Side Template Injection)](#ssti-server-side-template-injection)
@@ -73,7 +76,7 @@ This repository describes cheat sheet and knowledge for OSCP.
     - [Get privilege type from user](#get-privilege-type-from-user)
     - [Get access database](#get-access-database)
     - [Get schema names](#get-schema-names)
-    - [Get table name from information_schema](#get-table-name-from-information_schema)
+    - [Get table name from information\_schema](#get-table-name-from-information_schema)
     - [Get column name from table name](#get-column-name-from-table-name)
     - [Write shell](#write-shell)
   - [sqlmap](#sqlmap)
@@ -95,7 +98,7 @@ This repository describes cheat sheet and knowledge for OSCP.
   - [LFI by XXE](#lfi-by-xxe)
   - [Get PHP file by XXE](#get-php-file-by-xxe)
 - [Fuzz](#fuzz)
-  - [ffuf](#ffuf)
+  - [ffuf](#ffuf-1)
     - [Basic usage](#basic-usage)
     - [Special Character Fuzz](#special-character-fuzz)
     - [Subdomain Fuzz](#subdomain-fuzz)
@@ -448,6 +451,11 @@ gobuster vhost -w /usr/share/seclists/Discovery/DNS/bitquark-subdomains-top10000
 Find DNS subdomains:
 ```
 gobuster dns -d $Domain -w /usr/share/seclists/Discovery/DNS/bitquark-subdomains-top100000.txt
+```
+
+### ffuf
+```
+ffuf -w /usr/share/seclists/Discovery/DNS/bitquark-subdomains-top100000.txt -H "Host: FUZZ.<basedomain>" -u $URL
 ```
 
 #### Wordlist example
