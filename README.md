@@ -160,6 +160,7 @@ This repository describes cheat sheet and knowledge for OSCP.
   - [Run HTTP Server](#run-http-server)
     - [python3](#python3)
     - [python2](#python2)
+  - [break pyjail](#break-pyjail)
   - [Remote Access](#remote-access)
     - [wmiexec.py](#wmiexecpy)
     - [evil-winrm](#evil-winrm)
