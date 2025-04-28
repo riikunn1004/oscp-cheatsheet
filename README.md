@@ -1101,6 +1101,10 @@ python -m http.server <port>
 python -m SimpleHTTPServer <port>
 ```
 
+## break pyjail
+https://blog.pepsipu.com/posts/albatross-redpwnctf
+https://github.com/salvatore-abello/python-ctf-cheatsheet/blob/main/pyjails/README.md
+
 ## Remote Access
 ### wmiexec.py
 [wmiexec.py](https://github.com/fortra/impacket/blob/master/examples/wmiexec.py)
