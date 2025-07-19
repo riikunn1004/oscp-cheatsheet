@@ -320,6 +320,11 @@ Monitoring process tool in real time.
 ```
 https://github.com/DominicBreuker/pspy
 ```
+
+Monitoring the process at an interval of 1ms. (If the interval value is not set, the default interval is 100ms.)
+```
+./pspy64 -i 1
+```
 ## Kubernetes
 ### Enumerate pods (kubeletctl)
 Kubeletctl is a command line tool that implement kubelet's API.
