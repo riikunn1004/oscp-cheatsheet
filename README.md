@@ -104,6 +104,8 @@ This repository describes cheat sheet and knowledge for OSCP.
   - [Convert Putty private key format to openssh](#convert-putty-private-key-format-to-openssh)
   - [Port Forwarding](#port-forwarding)
     - [Chisel](#chisel)
+  - [Unix Socket Forwarding](#unix-socket-forwarding)
+    - [PostgreSQL](#postgresql)
 - [Depixelize](#depixelize)
   - [Depix](#depix)
 - [Spawning shell](#spawning-shell)
