@@ -756,6 +756,20 @@ Client:
 
 After running the above commands, we can access http://127.0.0.1:8081/ in attacker PC.
 
+## Unix Socket Forwarding 
+### PostgreSQL
+PostgreSQL listening behavior is defined at startup via configuration files.
+Check postgresql.conf or postgresql.auto.conf for listen_addresses and unix_socket_directories.
+listen_addresses = '' disables TCP; unix_socket_directories enables UNIX socket listening.
+The UNIX socket (e.g. /var/run/postgresql/.s.PGSQL.5432) exists for the lifetime of the DB process.
+Direct remote access to UNIX sockets is impossible by design.
+SSH is used as a transport: the remote SSH process connects locally to the UNIX socket and forwards traffic.
+Example:
+```
+ssh -N -L /tmp/.s.PGSQL.5432:/var/run/postgresql/.s.PGSQL.5432 user@target
+psql -h /tmp -p 5432 -U postgres
+```
+
 
 # Depixelize
 ## Depix
