@@ -975,8 +975,9 @@ chmod 4755 bash
 4000 is the flag to apply the SUID.
 
 ### Spawn a shell with the effective UID
+If set sid to /bin/bash, the user can run /bin/bash as root by using "-p" option.
 ```shell
-bash -p
+/bin/bash -p
 ```
 
 ### Run files with suid
