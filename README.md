@@ -781,6 +781,17 @@ ssh -N -L /tmp/.s.PGSQL.5432:/var/run/postgresql/.s.PGSQL.5432 user@target
 psql -h /tmp -p 5432 -U postgres
 ```
 
+# rsh / rlogin
+Legacy remote shell services (Ports 514/513) that rely on .rhosts trust; easily exploitable via IP/DNS spoofing.
+If the target trusts a hostname, spoof your IP's PTR record to match it (e.g., intern.build.vl) for passwordless root access.
+
+```bash
+rsh <target_ip> -l root "cat /root/root.txt"  # Remote execution
+rlogin <target_ip> -l root                    # Interactive login
+```
+
+- Located at ~/.rhosts, it must contain trusted entries like intern.build.vl root or + + to enable passwordless access.
+- Exploitation involves spoofing DNS (PTR records) so the target resolves your IP to the trusted hostname defined in the file.
 
 # Depixelize
 ## Depix
@@ -1007,6 +1018,12 @@ dig axfr @$IP
 ```
 [HackTricks - Pentesting DNS](https://book.hacktricks.xyz/network-services-pentesting/pentesting-dns)
 
+### For checking DNS poisoning 
+DNS lookup utility used to verify if DNS poisoning (A or PTR records) has successfully propagated.
+```
+dig intern.build.vl @10.129.70.142   # Check Forward Record
+dig -x 10.10.15.186 @10.129.70.142  # Check Reverse Record (PTR)
+``` 
 
 
 ## String Processing
@@ -1014,6 +1031,17 @@ dig axfr @$IP
 ```
 sed 's/ //g'
 ```
+
+## Proxy
+Redirects TCP traffic from any command through a SOCKS/HTTP proxy (e.g., a Chisel tunnel) to pivot into internal networks.
+Edit /etc/proxychains4.conf and add your proxy at the end: socks5 127.0.0.1 1080.
+
+```bash
+proxychains4 nmap -sT -Pn $internal_ip
+proxychains4 mysql -h $internal_ip -u root --skip_ssl
+```
+
+
 
 ## SMB
 ### smbclient
