@@ -31,6 +31,8 @@ This repository describes cheat sheet and knowledge for OSCP.
     - [LinPEAS](#linpeas)
     - [pspy](#pspy)
     - [Internal services running as root -> privesc](#internal-services-running-as-root---privesc)
+    - [Node.js `--inspect` / V8 Inspector (CDP) as root](#nodejs---inspect--v8-inspector-cdp-as-root)
+    - [lxd/lxc group -> root](#lxdlxc-group---root)
   - [Kubernetes](#kubernetes)
     - [Enumerate pods (kubeletctl)](#enumerate-pods-kubeletctl)
     - [Enumerate pods (kubectl)](#enumerate-pods-kubectl)
